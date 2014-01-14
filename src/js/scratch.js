@@ -18,6 +18,12 @@ $(function() {
     return canvasElement;
   };
 
+  function divideColorInPlace(c, divisor) {
+    $.each(c, function( comp, value ) {
+      c[comp] = Math.round(value/divisor);
+    });
+  }
+
   function extendImageData(imageData) {
     var self = imageData;
     var rgba = self.data;
@@ -41,13 +47,17 @@ $(function() {
     };
 
     self.floodFill = function(x, y, tolerance, markValue) {
-      var width = self.width,
-        height = self.height,
-        rgba = self.data;
-
+      var width = self.width;
+      var height = self.height;
+      var rgba = self.data;
       var targetColor = self.color(x, y);
-      var queue = [[x, y]];
 
+      var fillStats = {
+        area: 0,
+        averageColor: { r: 0, g: 0, b: 0 },
+      };
+
+      var queue = [[x, y]];
       while (queue.length > 0) {
         var unqueued = queue.shift();
         if (self.floodFillTest(unqueued[0], unqueued[1], targetColor, tolerance)) {
@@ -64,7 +74,12 @@ $(function() {
             xEast++;
           }
           for (var x = xWest; x <= xEast; x++) {
+            fillStats.area++;
+            fillStats.averageColor.r += rgba[(x + yWestEast * self.width) * 4];
+            fillStats.averageColor.g += rgba[(x + yWestEast * self.width) * 4 + 1];
+            fillStats.averageColor.b += rgba[(x + yWestEast * self.width) * 4 + 2];
             rgba[(x + yWestEast * self.width) * 4 + 3] = markValue;
+
             if (yWestEast > 0 &&
               self.floodFillTest(x, yWestEast - 1, targetColor, tolerance)) {
               queue.push([x, yWestEast - 1]);
@@ -76,6 +91,8 @@ $(function() {
           }
         }
       }
+      divideColorInPlace( fillStats.averageColor, fillStats.area );
+      return fillStats;
     };
   };
 
@@ -94,9 +111,10 @@ $(function() {
         y = e.offsetY;
       var c = imageData.color(x, y);
 
+      var patch = imageData.floodFill(x, y, 30, 150);
       console.log("x: " + x + ", y: " + y + "r: " + c.r + ", g: " + c.g + ", b: " + c.b);
-
-      imageData.floodFill(x, y, 30, 150);
+      console.log("patch area: " + patch.area + ", avg color r: " + patch.averageColor.r +
+        ", g: " + patch.averageColor.g + ", b: " + patch.averageColor.b);
       canvas.putImageData(imageData, 0, 0);
     });
   });
