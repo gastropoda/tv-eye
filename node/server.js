@@ -1,2 +1,2 @@
 var connect = require('connect');
-connect.createServer( connect.static("src") ).listen(8080);
+connect.createServer( connect.static("../tv-eye-js") ).listen(8080);
