@@ -1,0 +1,10 @@
+{
+  "name": "tv-eye",
+  "version": "0.0.1",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-ghoul": "~0.3.0",
+    "mocha": "~1.17.0",
+    "connect": "~2.12.0"
+  }
+}
