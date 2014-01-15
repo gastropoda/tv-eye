@@ -1,3 +1,3 @@
 define([
-  "spec/demo_spec",
+  "spec/flood-fill_spec",
 ]);

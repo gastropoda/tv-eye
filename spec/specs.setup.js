@@ -7,11 +7,9 @@ require.config({
   }
 });
 
-var expect;
-
 require(["ghoul", "mocha", "chai"], function(ghoul) {
   mocha.setup("bdd");
-  expect = require('chai').expect;
+  window.expect = require('chai').expect;
 
   require([
     "spec/all.specs",
