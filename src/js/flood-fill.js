@@ -15,14 +15,6 @@ define(function() {
         };
       };
 
-      self.floodFillTest = function(x, y, targetColor, tolerance) {
-        var c = self.color(x, y);
-        return c.a == 255 &&
-          (Math.abs(c.r - targetColor.r) < tolerance) &&
-          (Math.abs(c.g - targetColor.g) < tolerance) &&
-          (Math.abs(c.b - targetColor.b) < tolerance);
-      };
-
       self.floodFill = function(x, y, tolerance, markValue) {
         var width = self.width;
         var height = self.height;
@@ -36,20 +28,26 @@ define(function() {
         };
         var area = 0;
 
+        function floodFillTest(x, y) {
+          var pixelColor = self.color(x, y);
+          return pixelColor.a == 255 &&
+            (Math.abs(pixelColor.r - targetColor.r) < tolerance) &&
+            (Math.abs(pixelColor.g - targetColor.g) < tolerance) &&
+            (Math.abs(pixelColor.b - targetColor.b) < tolerance);
+        };
+
         var queue = [[x, y]];
         while (queue.length > 0) {
           var unqueued = queue.shift();
-          if (self.floodFillTest(unqueued[0], unqueued[1], targetColor, tolerance)) {
+          if (floodFillTest(unqueued[0], unqueued[1])) {
             var xWest = unqueued[0],
               xEast = unqueued[0];
             var yWestEast = unqueued[1];
-            while (xWest > 0 &&
-              self.floodFillTest(xWest - 1, yWestEast, targetColor, tolerance)) {
+            while (xWest > 0 && floodFillTest(xWest - 1, yWestEast)) {
               xWest--;
             }
 
-            while (xEast < self.width - 1 &&
-              self.floodFillTest(xEast + 1, yWestEast, targetColor, tolerance)) {
+            while (xEast < self.width - 1 && floodFillTest(xEast + 1, yWestEast)) {
               xEast++;
             }
             for (var x = xWest; x <= xEast; x++) {
@@ -59,12 +57,10 @@ define(function() {
               acc.b += rgba[(x + yWestEast * self.width) * 4 + 2];
               rgba[(x + yWestEast * self.width) * 4 + 3] = markValue;
 
-              if (yWestEast > 0 &&
-                self.floodFillTest(x, yWestEast - 1, targetColor, tolerance)) {
+              if (yWestEast > 0 && floodFillTest(x, yWestEast - 1)) {
                 queue.push([x, yWestEast - 1]);
               }
-              if (yWestEast < self.height - 1 &&
-                self.floodFillTest(x, yWestEast + 1, targetColor, tolerance)) {
+              if (yWestEast < self.height - 1 && floodFillTest(x, yWestEast + 1)) {
                 queue.push([x, yWestEast + 1]);
               }
             }
