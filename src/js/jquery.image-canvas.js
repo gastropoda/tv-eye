@@ -23,6 +23,6 @@ define(["jquery"], function($) {
       canvas.context2d().drawImage(image.get(0), 0, 0);
       image.replaceWith(canvas);
       onLoad(canvas);
-    });
+    }).hide();
   };
 });
