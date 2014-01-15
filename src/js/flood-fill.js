@@ -1,11 +1,5 @@
 define(function() {
 
-  function divideColorInPlace(c, divisor) {
-    c.r = Math.round(c.r / divisor);
-    c.g = Math.round(c.g / divisor);
-    c.b = Math.round(c.b / divisor);
-  }
-
   return {
     extend: function(imageData) {
       var self = imageData;
@@ -35,14 +29,12 @@ define(function() {
         var rgba = self.data;
         var targetColor = self.color(x, y);
 
-        var fillStats = {
-          area: 0,
-          averageColor: {
-            r: 0,
-            g: 0,
-            b: 0
-          },
+        var acc = {
+          r: 0,
+          g: 0,
+          b: 0
         };
+        var area = 0;
 
         var queue = [[x, y]];
         while (queue.length > 0) {
@@ -61,10 +53,10 @@ define(function() {
               xEast++;
             }
             for (var x = xWest; x <= xEast; x++) {
-              fillStats.area++;
-              fillStats.averageColor.r += rgba[(x + yWestEast * self.width) * 4];
-              fillStats.averageColor.g += rgba[(x + yWestEast * self.width) * 4 + 1];
-              fillStats.averageColor.b += rgba[(x + yWestEast * self.width) * 4 + 2];
+              area++;
+              acc.r += rgba[(x + yWestEast * self.width) * 4];
+              acc.g += rgba[(x + yWestEast * self.width) * 4 + 1];
+              acc.b += rgba[(x + yWestEast * self.width) * 4 + 2];
               rgba[(x + yWestEast * self.width) * 4 + 3] = markValue;
 
               if (yWestEast > 0 &&
@@ -78,8 +70,14 @@ define(function() {
             }
           }
         }
-        divideColorInPlace(fillStats.averageColor, fillStats.area);
-        return fillStats;
+        return {
+          area: area,
+          averageColor: {
+            r: Math.floor(acc.r / area),
+            g: Math.floor(acc.g / area),
+            b: Math.floor(acc.b / area),
+          },
+        };
       };
 
     }
