@@ -1,5 +1,5 @@
 require.config({
-  baseUrl: "/src/",
+  baseUrl: "/src/js/",
   paths: {
     ghoul: "/vendor/grunt-ghoul/lib/ghoul",
     mocha: "/vendor/mocha/mocha",
