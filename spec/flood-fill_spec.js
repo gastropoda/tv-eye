@@ -1,4 +1,4 @@
-define(["flood-fill", "jquery"], function(floodFill, $) {
+define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
 
   describe("testing canvas", function() {
     var canvas, context;
@@ -42,20 +42,15 @@ define(["flood-fill", "jquery"], function(floodFill, $) {
       });
 
       it("is drawn", function() {
-        var expected = [0, null, 0, 255];
-
-        for (var y = 0; y < canvasHeight; y++) {
-          for (var x = 0; x < canvasWidth; x++) {
-            var inRect = x > 0 && y > 0 && x < 4 && y < 4;
-            expected[1] = inRect ? 200 : 0;
-            var at = " @ " + x + ", " + y;
-
-            expect(rgba[(x + y * canvasWidth) * 4]).to.equal(expected[0], "r" + at);
-            expect(rgba[(x + y * canvasWidth) * 4 + 1]).to.equal(expected[1], "g" + at);
-            expect(rgba[(x + y * canvasWidth) * 4 + 2]).to.equal(expected[2], "b" + at);
-            expect(rgba[(x + y * canvasWidth) * 4 + 3]).to.equal(expected[3], "a" + at);
-          }
-        }
+        expect(image).to.contain.pixels(function(x, y) {
+          var inRect = x > 0 && y > 0 && x < 4 && y < 4;
+          return {
+            r: 0,
+            g: inRect ? 200 : 0,
+            b: 0,
+            a: 255,
+          };
+        });
       });
 
       describe("floodFill", function() {
@@ -65,21 +60,15 @@ define(["flood-fill", "jquery"], function(floodFill, $) {
         });
 
         it("fills the color", function() {
-          var expected = [0, null, 0, null];
-
-          for (var y = 0; y < canvasHeight; y++) {
-            for (var x = 0; x < canvasWidth; x++) {
-              var inRect = x > 0 && y > 0 && x < 4 && y < 4;
-              expected[1] = inRect ? 200 : 0;
-              expected[3] = inRect ? 1 : 255;
-              var at = " @ " + x + ", " + y;
-
-              expect(rgba[(x + y * canvasWidth) * 4]).to.equal(expected[0], "r" + at);
-              expect(rgba[(x + y * canvasWidth) * 4 + 1]).to.equal(expected[1], "g" + at);
-              expect(rgba[(x + y * canvasWidth) * 4 + 2]).to.equal(expected[2], "b" + at);
-              expect(rgba[(x + y * canvasWidth) * 4 + 3]).to.equal(expected[3], "a" + at);
-            }
-          }
+          expect(image).to.contain.pixels(function(x, y) {
+            var inRect = x > 0 && y > 0 && x < 4 && y < 4;
+            return {
+              r: 0,
+              g: inRect ? 200 : 0,
+              b: 0,
+              a: inRect ? 1 : 255,
+            };
+          });
         });
 
       });

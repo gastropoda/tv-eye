@@ -16,6 +16,7 @@ require(["jquery", "ghoul", "chai", "mocha"
   window.expect = require('chai').expect;
 
   require([
+    "spec/chai.image",
     "spec/all.specs",
   ], function() {
     mocha.run(function() {
