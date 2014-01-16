@@ -10,17 +10,19 @@ require.config({
   }
 });
 
-require(["ghoul", "mocha", "chai"], function(ghoul) {
+require(["jquery", "ghoul", "chai", "mocha"
+], function($, ghoul, chai) {
   mocha.setup("bdd");
   window.expect = require('chai').expect;
 
   require([
     "spec/all.specs",
-    ], function() {
+  ], function() {
     mocha.run(function() {
-      ghoul.emit("done", document.getElementById("mocha").innerHTML);
+      var output = $("#mocha").clone();
+      output.find("code").remove();
+      ghoul.emit("done", output.html());
     });
   });
 
 });
-
