@@ -81,6 +81,9 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
           expect(floodFillResult.averageColor).to.eql({r:0,g:200,b:0});
         });
 
+        it("returns bounds", function() {
+          expect(floodFillResult.bounds).to.eql([[1,1],[3,3]]);
+        });
       });
     });
   });
