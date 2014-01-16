@@ -54,9 +54,11 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
       });
 
       describe("floodFill", function() {
+        var floodFillResult;
+
         beforeEach(function() {
           floodFill.extend(image);
-          image.floodFill(2, 2, 0, 1);
+          floodFillResult = image.floodFill(2, 2, 0, 1);
         });
 
         it("fills the color", function() {
@@ -69,6 +71,14 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
               a: inRect ? 1 : 255,
             };
           });
+        });
+
+        it("returns area", function() {
+          expect(floodFillResult.area).to.eq(9);
+        });
+
+        it("returns average color", function() {
+          expect(floodFillResult.averageColor).to.eql({r:0,g:200,b:0});
         });
 
       });
