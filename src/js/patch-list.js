@@ -28,6 +28,7 @@ define(["knockout"], function(ko) {
       var array = patches();
       array[i] = null;
       patches(array);
+      return i;
     };
 
     self.nextIndex = function() {

@@ -69,6 +69,14 @@ define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
         expect(patchList().get(2), "patch[2]").to.eq(somePatches[2]);
       });
 
+      it("returns index of the removed patch (by index)", function() {
+        expect(patchList().remove(1)).to.eq(1);
+      });
+
+      it("returns the index of the removed patch (by value)", function() {
+        expect(patchList().remove(somePatches[1])).to.eq(1);
+      });
+
       it("throws an exception if index out of bounds", function() {
         expect(function() {
           patchList().remove(42);
