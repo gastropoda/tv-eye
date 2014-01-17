@@ -5,7 +5,7 @@ define(["knockout"], function(ko) {
     var patches = ko.observableArray(initialContents || []);
 
     self.patches = ko.computed(function() {
-      return patches().filter(function( patch ) {
+      return patches().filter(function(patch) {
         return patch && patch.selected();
       });
     });
@@ -15,7 +15,7 @@ define(["knockout"], function(ko) {
     };
 
     self.remove = function(i) {
-      var array = patches();
+      var array = patches().slice();
       array[i] = null;
       patches(array);
     };
