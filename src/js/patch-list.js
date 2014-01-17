@@ -14,7 +14,17 @@ define(["knockout"], function(ko) {
       return patches()[i];
     };
 
-    self.remove = function(i) {
+    self.remove = function(patchOrIndex) {
+      var i = patchOrIndex;
+      if (isNaN(i)) {
+        i = patches().indexOf(i);
+        if (i<0) {
+          throw "No such patch";
+        }
+      }
+      if (i < 0 || i >= patches().length) {
+        throw "Patch index out of bounds";
+      }
       var array = patches();
       array[i] = null;
       patches(array);
@@ -25,7 +35,7 @@ define(["knockout"], function(ko) {
       var tip = patches().length;
       var limit = self.maxCount();
 
-      return hole >= 0 ?  hole : (tip < limit ?  tip : -1);
+      return hole >= 0 ? hole : (tip < limit ? tip : -1);
     };
 
     self.put = function(patch) {
@@ -34,7 +44,8 @@ define(["knockout"], function(ko) {
         var array = patches();
         array[i] = patch;
         patches(array);
-      } else {
+      }
+      else {
         throw "Patch list is full";
       }
     };

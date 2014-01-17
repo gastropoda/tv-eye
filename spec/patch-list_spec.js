@@ -55,11 +55,30 @@ define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
     });
 
     describe(".remove()", function() {
-      it("replaces a patch with null", function() {
+      it("given an index replaces the patch by index with null", function() {
         patchList().remove(1);
         expect(patchList().get(0), "patch[0]").to.eq(somePatches[0]);
         expect(patchList().get(1), "patch[1]").to.be.null;
         expect(patchList().get(2), "patch[2]").to.eq(somePatches[2]);
+      });
+
+      it("given a patch replaces it with null", function() {
+        patchList().remove(somePatches[1]);
+        expect(patchList().get(0), "patch[0]").to.eq(somePatches[0]);
+        expect(patchList().get(1), "patch[1]").to.be.null;
+        expect(patchList().get(2), "patch[2]").to.eq(somePatches[2]);
+      });
+
+      it("throws an exception if index out of bounds", function() {
+        expect(function() {
+          patchList().remove(42);
+        }).to.throw(/out of bounds/);
+      });
+
+      it("throws an exception if patch is not in the list", function() {
+        expect(function() {
+          patchList().remove(newPatch);
+        }).to.throw(/No such patch/);
       });
     });
 
