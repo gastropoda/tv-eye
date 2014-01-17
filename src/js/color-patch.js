@@ -10,6 +10,21 @@ define(function() {
       }
       return selected;
     }
+
+    var area = options.area;
+    self.area = function() {
+      return area;
+    }
+
+    var color = options.color;
+    self.color = function() {
+      return color;
+    }
+
+    var bounds = options.bounds;
+    self.bounds = function() {
+      return bounds;
+    }
   };
 
   return ColorPatch;
