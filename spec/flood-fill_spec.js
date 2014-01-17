@@ -2,8 +2,8 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
 
   describe("testing canvas", function() {
     var canvas, context;
-    var canvasWidth = 5,
-      canvasHeight = 5;
+    var canvasWidth = 7,
+      canvasHeight = 7;
 
     beforeEach(function() {
       canvas = $("<canvas/>")
@@ -32,21 +32,31 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
     describe("green 3x3 square", function() {
       var image, rgba;
 
+      var rect = {
+        x: 1,
+        y: 2,
+        w: 3,
+        h: 4
+      };
+
+      function inRect(x, y) {
+        return x >= rect.x && x < rect.x + rect.w && y >= rect.y && y < rect.y + rect.h;
+      }
+
       beforeEach(function() {
         context.fillStyle = "rgba(0,0,0,255)";
         context.fillRect(0, 0, canvasWidth, canvasHeight);
         context.fillStyle = "rgb(0,200,0)";
-        context.fillRect(1, 1, 3, 3);
+        context.fillRect(rect.x, rect.y, rect.w, rect.h);
         image = context.getImageData(0, 0, canvasWidth, canvasHeight);
         rgba = image.data;
       });
 
       it("is drawn", function() {
         expect(image).to.contain.pixels(function(x, y) {
-          var inRect = x > 0 && y > 0 && x < 4 && y < 4;
           return {
             r: 0,
-            g: inRect ? 200 : 0,
+            g: inRect(x, y) ? 200 : 0,
             b: 0,
             a: 255,
           };
@@ -63,26 +73,29 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
 
         it("fills the color", function() {
           expect(image).to.contain.pixels(function(x, y) {
-            var inRect = x > 0 && y > 0 && x < 4 && y < 4;
             return {
               r: 0,
-              g: inRect ? 200 : 0,
+              g: inRect(x, y) ? 200 : 0,
               b: 0,
-              a: inRect ? 1 : 255,
+              a: inRect(x, y) ? 1 : 255,
             };
           });
         });
 
         it("returns area", function() {
-          expect(floodFillResult.area).to.eq(9);
+          expect(floodFillResult.area).to.eq(rect.w * rect.h);
         });
 
         it("returns average color", function() {
-          expect(floodFillResult.averageColor).to.eql({r:0,g:200,b:0});
+          expect(floodFillResult.averageColor).to.eql({
+            r: 0,
+            g: 200,
+            b: 0
+          });
         });
 
         it("returns bounds", function() {
-          expect(floodFillResult.bounds).to.eql([[1,1],[3,3]]);
+          expect(floodFillResult.bounds).to.eql(rect);
         });
       });
     });

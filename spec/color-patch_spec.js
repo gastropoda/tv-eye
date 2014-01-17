@@ -31,5 +31,9 @@ define(["color-patch"], function(ColorPatch) {
       });
     });
 
+    describe("size", function() {
+      it("comes from bounds");
+    });
+
   });
 });

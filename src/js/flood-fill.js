@@ -81,7 +81,12 @@ define(function() {
             g: Math.floor(acc.g / area),
             b: Math.floor(acc.b / area),
           },
-          bounds: [[minX, minY], [maxX, maxY]],
+          bounds: {
+            x: minX,
+            y: minY,
+            w: maxX - minX + 1,
+            h: maxY - minY + 1
+          }
         };
       };
 

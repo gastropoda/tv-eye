@@ -7,13 +7,14 @@
 
   <body>
     <div id="scratch">
-
       <ul class="patches" data-bind="foreach: patches">
         <li class="patch-info">Patch
-        <ul>
-          <li><b>area:</b> <span data-bind="text: area"/></li>
+          <ul>
+            <li><b>area:</b> <span data-bind="text: area" /></li>
+            <li><b>color:</b> <span data-bind="text: color, style: { background: color }" /></li>
+            <li><b>bounds:</b> <span data-bind="text: bounds" /></li>
         </li>
-      </ul>
+        </ul>
     </div>
   </body>
   <script data-main="js/main" src="js/lib/require.js"></script>
