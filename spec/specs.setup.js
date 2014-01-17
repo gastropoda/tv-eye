@@ -7,12 +7,15 @@ require.config({
     // testing
     ghoul: "/vendor/grunt-ghoul/lib/ghoul",
     mocha: "/vendor/mocha/mocha",
-    chai: "/vendor/chai/chai"
+    chai: "/vendor/chai/chai",
+    sinon: "/vendor/sinon/pkg/sinon",
+    "sinon-chai": "/vendor/sinon-chai/lib/sinon-chai",
   }
 });
 
-require(["jquery", "ghoul", "chai", "mocha"
-], function($, ghoul, chai) {
+require(["jquery", "ghoul", "chai", "sinon-chai", "mocha", "sinon"
+], function($, ghoul, chai, sinonChai) {
+  chai.use(sinonChai);
   mocha.setup("bdd");
   window.expect = require('chai').expect;
 
