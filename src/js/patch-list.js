@@ -20,20 +20,17 @@ define(["knockout"], function(ko) {
       patches(array);
     };
 
-    self.nextFreeIndex = function() {
-      var i = patches().indexOf(null);
-      if (i >= 0) {
-        return i;
-      }
-      else {
-        i = patches().length;
-        if (i <= PATCH_COUNT_MAX) {
-          return i;
-        }
-        else {
-          return -1;
-        }
-      }
+    self.nextIndex = function() {
+      var hole = patches().indexOf(null);
+      var tip = patches().length;
+      var limit = self.maxCount();
+
+      return hole >= 0 ?  hole : (tip < limit ?  tip : -1);
+    };
+
+    var MAX_COUNT = 254;
+    self.maxCount = function() {
+      return MAX_COUNT;
     };
 
   };

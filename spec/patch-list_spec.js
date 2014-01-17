@@ -12,6 +12,7 @@ define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
     function emptyList() {
       return _patchList_ || (_patchList_ = new PatchList());
     }
+
     function patchList() {
       return _patchList_ || (_patchList_ = new PatchList(somePatches));
     }
@@ -22,7 +23,6 @@ define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
       });
 
       describe("with some patches", function() {
-
         it("returns the patches", function() {
           expect(patchList().patches()).to.eql(somePatches);
         });
@@ -40,7 +40,6 @@ define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
     });
 
     describe(".get()", function() {
-
       it("returns a patch by index", function() {
         for (var i = 0; i < 3; i++) {
           expect(patchList().get(i)).to.eq(somePatches[i]);
@@ -50,12 +49,31 @@ define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
     });
 
     describe(".remove()", function() {
-
       it("replaces a patch with null", function() {
         patchList().remove(1);
-        expect(patchList().get(0),"patch[0]").to.eq(somePatches[0]);
-        expect(patchList().get(1),"patch[1]").to.be.null;
-        expect(patchList().get(2),"patch[2]").to.eq(somePatches[2]);
+        expect(patchList().get(0), "patch[0]").to.eq(somePatches[0]);
+        expect(patchList().get(1), "patch[1]").to.be.null;
+        expect(patchList().get(2), "patch[2]").to.eq(somePatches[2]);
+      });
+    });
+
+    describe(".nextIndex()", function() {
+      it("starts with 0", function() {
+        expect(emptyList().nextIndex()).to.be.zero;
+      });
+
+      it("points after filled list", function() {
+        expect(patchList().nextIndex()).to.eq(3);
+      });
+
+      it("points to empty place if any", function() {
+        somePatches[1] = null;
+        expect(patchList().nextIndex()).to.eq(1);
+      });
+
+      it("returns -1 if no places left", function() {
+        sinon.stub(patchList(), "maxCount").returns(somePatches.length);
+        expect(patchList().nextIndex()).to.eq(-1);
       });
     });
   });
