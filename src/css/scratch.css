@@ -7,3 +7,10 @@
 #scratch .patches {
   float: right;
 }
+
+.patch-info {
+  color: #777;
+}
+.patch-info.selected {
+  color: black;
+}

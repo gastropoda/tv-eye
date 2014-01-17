@@ -32,15 +32,13 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
     describe("green 3x3 square", function() {
       var image, rgba;
 
-      var rect = {
-        x: 1,
-        y: 2,
-        w: 3,
-        h: 4
-      };
+      var rect = { x: 1, y: 2, w: 3, h: 4 };
 
       function inRect(x, y) {
-        return x >= rect.x && x < rect.x + rect.w && y >= rect.y && y < rect.y + rect.h;
+        return x >= rect.x &&
+               x < rect.x + rect.w &&
+               y >= rect.y &&
+               y < rect.y + rect.h;
       }
 
       beforeEach(function() {
@@ -54,12 +52,7 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
 
       it("is drawn", function() {
         expect(image).to.contain.pixels(function(x, y) {
-          return {
-            r: 0,
-            g: inRect(x, y) ? 200 : 0,
-            b: 0,
-            a: 255,
-          };
+          return { r: 0, g: inRect(x, y) ? 200 : 0, b: 0, a: 255, };
         });
       });
 
@@ -73,12 +66,7 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
 
         it("fills the color", function() {
           expect(image).to.contain.pixels(function(x, y) {
-            return {
-              r: 0,
-              g: inRect(x, y) ? 200 : 0,
-              b: 0,
-              a: inRect(x, y) ? 1 : 255,
-            };
+            return { r: 0, g: inRect(x, y) ? 200 : 0, b: 0, a: inRect(x, y) ? 1 : 255, };
           });
         });
 
@@ -87,11 +75,7 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
         });
 
         it("returns average color", function() {
-          expect(floodFillResult.averageColor).to.eql({
-            r: 0,
-            g: 200,
-            b: 0
-          });
+          expect(floodFillResult.averageColor).to.eql({ r: 0, g: 200, b: 0 });
         });
 
         it("returns bounds", function() {

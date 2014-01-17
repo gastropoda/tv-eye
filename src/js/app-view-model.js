@@ -5,6 +5,8 @@ define([
     "jquery.image-canvas"
 ], function($, ko, FloodFill, ColorPatch) {
 
+  var NO_PATCH = 255;
+
   function htmlizeColor(c) {
     return "rgb(" + [c.r, c.g, c.b].join(",") + ")";
   }
@@ -15,24 +17,36 @@ define([
 
     self.patches = ko.observableArray([]);
 
-    self.onCanvasClick = function(e) {
-      var x = e.offsetX;
-      var y = e.offsetY;
-      var c = imageData.color(x, y);
+    function nextPatchIndex() {
+      return self.patches().length;
+    }
 
-      var patch = imageData.floodFill(x, y, 30, 150);
+    self.findPatch = function(x,y) {
+      var patch = imageData.floodFill(x, y, 30, nextPatchIndex());
       context.putImageData(
         imageData,
         0, 0,
         patch.bounds.x, patch.bounds.y,
         patch.bounds.w, patch.bounds.h);
 
-      self.patches.push(new ColorPatch({
+      return new ColorPatch({
         area: patch.area,
         color: htmlizeColor(patch.averageColor),
         bounds: patch.bounds
-      }));
+      });
+    };
 
+    self.onCanvasClick = function(e) {
+      var x = e.offsetX;
+      var y = e.offsetY;
+      var c = imageData.color(x, y);
+
+      if (c.a == NO_PATCH) {
+        var patch = self.findPatch(x,y);
+        self.patches.push( patch );
+      } else {
+        self.patches()[ c.a ].toggleSelected();
+      }
     };
 
     $("#scratch").loadImageCanvas("img/groningen-test.jpg", function(canvas) {

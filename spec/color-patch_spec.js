@@ -3,13 +3,18 @@ define(["color-patch"], function(ColorPatch) {
     describe("selected", function() {
       var patch = new ColorPatch
       it("is false by default", function() {
+        expect(patch.selected()).to.be.true;
+      });
+      it("can be toggled with toggleSelected", function() {
+        patch.toggleSelected();
         expect(patch.selected()).to.be.false;
+        patch.toggleSelected();
+        expect(patch.selected()).to.be.true;
       });
     });
 
     describe("area", function() {
       var patch = new ColorPatch({area: 13});
-
       it("is set from options argument", function(){
         expect(patch.area()).to.eq(13);
       });
