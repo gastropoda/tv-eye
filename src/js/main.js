@@ -5,6 +5,4 @@ require.config({
   }
 });
 
-require(["scratch"], function(scratch) {
-  scratch.configure();
-});
+require(["scratch"]);

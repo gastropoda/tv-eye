@@ -6,7 +6,15 @@
   </head>
 
   <body>
-    <div id="scratch"></div>
+    <div id="scratch">
+
+      <ul class="patches" data-bind="foreach: patches">
+        <li class="patch-info">Patch
+        <ul>
+          <li><b>area:</b> <span data-bind="text: area"/></li>
+        </li>
+      </ul>
+    </div>
   </body>
   <script data-main="js/main" src="js/lib/require.js"></script>
 

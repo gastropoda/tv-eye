@@ -1,31 +1,11 @@
-define(function() {
-  var ColorPatch = function(options) {
+define(["knockout"], function(ko) {
+  return function ColorPatch(options) {
     var self = this;
     options = options || {};
 
-    var selected = false;
-    self.selected = function(on) {
-      if (arguments.length>0) {
-        selected = !! on;
-      }
-      return selected;
-    }
-
-    var area = options.area;
-    self.area = function() {
-      return area;
-    }
-
-    var color = options.color;
-    self.color = function() {
-      return color;
-    }
-
-    var bounds = options.bounds;
-    self.bounds = function() {
-      return bounds;
-    }
+    self.selected = ko.observable( false );
+    self.area = ko.observable( options.area );
+    self.color = ko.observable( options.color );
+    self.bounds = ko.observable( options.bounds );
   };
-
-  return ColorPatch;
 });
