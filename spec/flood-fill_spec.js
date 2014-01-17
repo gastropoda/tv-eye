@@ -2,10 +2,16 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
 
   describe("FloodFill", function() {
 
-    var canvas, context, image, rgba;
+    var canvas, context, image;
     var canvasWidth = 7;
     var canvasHeight = 7;
-    var rect = { x: 1, y: 2, w: 3, h: 4 };
+    var rect = {
+      x: 1,
+      y: 2,
+      w: 3,
+      h: 4
+    };
+
     function inRect(x, y) {
       return x >= rect.x &&
         x < rect.x + rect.w &&
@@ -24,7 +30,6 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
       context.fillStyle = "rgb(0,200,0)";
       context.fillRect(rect.x, rect.y, rect.w, rect.h);
       image = context.getImageData(0, 0, canvasWidth, canvasHeight);
-      rgba = image.data;
     });
 
     describe(".floodFill()", function() {
@@ -60,6 +65,35 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
 
       it("returns bounds", function() {
         expect(floodFillResult.bounds).to.eql(rect);
+      });
+    });
+
+    describe(".replaceIndex()", function() {
+      beforeEach(function() {
+        context.globalCompositeOperation = "copy";
+        // 0.165 corresponds to 8-bit 42
+        context.fillStyle = "rgba(0,0,0,0.165)";
+        context.fillRect(rect.x, rect.y, rect.w, rect.h);
+        image = context.getImageData(0, 0, canvasWidth, canvasHeight);
+
+        floodFill.extend(image);
+        image.replaceIndex(42, 7, {
+          x: 0,
+          y: 0,
+          w: rect.x + rect.w,
+          h: rect.y + rect.h - 1
+        });
+      });
+
+      it("replaces index within the ROI", function() {
+        expect(image).to.contain.pixels(function(x, y) {
+          return {
+            r: 0,
+            g: 0,
+            b: 0,
+            a: !inRect(x, y) ? 255 : ( y < rect.y + rect.h - 1 ) ? 7 : 42
+          };
+        });
       });
     });
   });
