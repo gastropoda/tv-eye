@@ -1,9 +1,9 @@
 define([
     /* captured by function args */
-    "jquery", "flood-fill",
+    "jquery", "knockout", "flood-fill",
     /* not captured */
     "jquery.image-canvas"
-], function($, floodFill) {
+], function($, ko, floodFill) {
 
   function configure() {
 
