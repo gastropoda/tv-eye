@@ -1,9 +1,9 @@
 define([
     /* captured by function args */
-    "jquery", "knockout", "flood-fill", "color-patch",
+    "jquery", "knockout", "flood-fill", "color-patch", "patch-list",
     /* not captured */
     "jquery.image-canvas"
-], function($, ko, FloodFill, ColorPatch) {
+], function($, ko, FloodFill, ColorPatch, PatchList) {
 
   var NO_PATCH = 255;
 
@@ -15,10 +15,12 @@ define([
     var self = this;
     var imageData, context;
 
-    self.patches = ko.observableArray([]);
+    var patchList = new PatchList();
+
+    self.patches = patchList.patches;
 
     function nextPatchIndex() {
-      return self.patches().length;
+      return patchList.nextIndex();
     }
 
     self.findPatch = function(x,y) {
@@ -43,9 +45,9 @@ define([
 
       if (c.a == NO_PATCH) {
         var patch = self.findPatch(x,y);
-        self.patches.push( patch );
+        patchList.put( patch );
       } else {
-        self.patches()[ c.a ].toggleSelected();
+        patchList.get(c.a).toggleSelected();
       }
     };
 
