@@ -35,10 +35,5 @@ define(["color-patch"], function(ColorPatch) {
         expect(patch.bounds()).to.eql(bounds);
       });
     });
-
-    describe(".size()", function() {
-      it("comes from bounds");
-    });
-
   });
 });
