@@ -27,7 +27,7 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
       rgba = image.data;
     });
 
-    describe(".floodFill", function() {
+    describe(".floodFill()", function() {
       var floodFillResult;
 
       beforeEach(function() {
