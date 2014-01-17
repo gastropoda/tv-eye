@@ -9,6 +9,7 @@
     <div id="scratch">
       <ul class="patches" data-bind="foreach: patches">
         <li class="patch-info" data-bind="css: {selected: selected}">Patch
+        <a href="#" data-bind="click: $parent.removePatch">delete</a>
           <ul>
             <li><b>area:</b> <span data-bind="text: area" /></li>
             <li><b>color:</b> <span data-bind="text: color, style: { background: color }" /></li>

@@ -23,7 +23,7 @@ define([
       return patchList.nextIndex();
     }
 
-    self.findPatch = function(x,y) {
+    self.findPatch = function(x, y) {
       var patch = imageData.floodFill(x, y, 30, nextPatchIndex());
       context.putImageData(
         imageData,
@@ -38,15 +38,19 @@ define([
       });
     };
 
+    self.removePatch = function(patch) {
+      patchList.remove(patch)
+    };
+
     self.onCanvasClick = function(e) {
       var x = e.offsetX;
       var y = e.offsetY;
       var c = imageData.color(x, y);
 
       if (c.a == NO_PATCH) {
-        var patch = self.findPatch(x,y);
-        patchList.put( patch );
-      } else {
+        patchList.put(self.findPatch(x, y));
+      }
+      else {
         patchList.get(c.a).toggleSelected();
       }
     };
