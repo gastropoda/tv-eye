@@ -15,7 +15,7 @@ define(["knockout"], function(ko) {
     };
 
     self.remove = function(i) {
-      var array = patches().slice();
+      var array = patches();
       array[i] = null;
       patches(array);
     };
@@ -26,6 +26,17 @@ define(["knockout"], function(ko) {
       var limit = self.maxCount();
 
       return hole >= 0 ?  hole : (tip < limit ?  tip : -1);
+    };
+
+    self.put = function(patch) {
+      var i = self.nextIndex();
+      if (i >= 0) {
+        var array = patches();
+        array[i] = patch;
+        patches(array);
+      } else {
+        throw "Patch list is full";
+      }
     };
 
     var MAX_COUNT = 254;

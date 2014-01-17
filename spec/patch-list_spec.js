@@ -3,10 +3,12 @@ define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
     var _patchList_;
     var ko = require("knockout");
     var somePatches;
+    var newPatch;
 
     beforeEach(function() {
       _patchList_ = null;
       somePatches = [new ColorPatch(), new ColorPatch(), new ColorPatch()];
+      newPatch = new ColorPatch();
     });
 
     function emptyList() {
@@ -15,6 +17,10 @@ define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
 
     function patchList() {
       return _patchList_ || (_patchList_ = new PatchList(somePatches));
+    }
+    function fullList() {
+      sinon.stub(patchList(), "maxCount").returns(somePatches.length);
+      return patchList();
     }
 
     describe(".patches()", function() {
@@ -72,9 +78,23 @@ define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
       });
 
       it("returns -1 if no places left", function() {
-        sinon.stub(patchList(), "maxCount").returns(somePatches.length);
-        expect(patchList().nextIndex()).to.eq(-1);
+        expect(fullList().nextIndex()).to.eq(-1);
       });
     });
+
+    describe(".put()", function() {
+      it("puts a patch at nextIndex", function() {
+        sinon.stub(patchList(), "nextIndex").returns(42);
+        patchList().put( newPatch );
+        expect(patchList().get(42)).to.eq(newPatch);
+      });
+
+      it("throws an exception if list is full", function() {
+        expect( function() {
+          fullList.put( newPatch );
+        }).to.throw(/full/);
+      });
+    });
+
   });
 });
