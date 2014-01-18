@@ -18,6 +18,41 @@ define([
     var patchList = new PatchList();
 
     self.patches = patchList.patches;
+    self.patchCount = ko.computed(function() {
+      return self.patches().length;
+    });
+    self.minPatchSize = ko.computed(function() {
+      var min;
+      self.patches().forEach(function(patch) {
+        var b = patch.bounds();
+        if (min) {
+          if (min[0] > b.w)
+            min[0] = b.w;
+          if (min[1] > b.h)
+            min[1] = b.h;
+        }
+        else {
+          min = [b.w, b.h];
+        }
+      });
+      return min;
+    });
+    self.maxPatchSize = ko.computed(function() {
+      var max;
+      self.patches().forEach(function(patch) {
+        var b = patch.bounds();
+        if (max) {
+          if (max[0] < b.w)
+            max[0] = b.w;
+          if (max[1] < b.h)
+            max[1] = b.h;
+        }
+        else {
+          max = [b.w, b.h];
+        }
+      });
+      return max;
+    });
 
     function nextPatchIndex() {
       return patchList.nextIndex();
