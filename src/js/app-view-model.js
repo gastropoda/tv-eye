@@ -2,7 +2,7 @@ define([
     /* captured by function args */
     "jquery", "knockout", "flood-fill", "color-patch", "patch-list",
     /* not captured */
-    "jquery.image-canvas"
+    "paper", "jquery.image-canvas"
 ], function($, ko, FloodFill, ColorPatch, PatchList) {
 
   var NO_PATCH = 255;
@@ -21,37 +21,23 @@ define([
     self.patchCount = ko.computed(function() {
       return self.patches().length;
     });
+
     self.minPatchSize = ko.computed(function() {
-      var min;
+      var minSize;
       self.patches().forEach(function(patch) {
-        var b = patch.bounds();
-        if (min) {
-          if (min[0] > b.w)
-            min[0] = b.w;
-          if (min[1] > b.h)
-            min[1] = b.h;
-        }
-        else {
-          min = [b.w, b.h];
-        }
+        var patchSize = patch.bounds().size;
+        minSize = minSize ? paper.Size.min(minSize, patchSize) : patchSize;
       });
-      return min;
+      return minSize;
     });
+
     self.maxPatchSize = ko.computed(function() {
-      var max;
+      var maxSize;
       self.patches().forEach(function(patch) {
-        var b = patch.bounds();
-        if (max) {
-          if (max[0] < b.w)
-            max[0] = b.w;
-          if (max[1] < b.h)
-            max[1] = b.h;
-        }
-        else {
-          max = [b.w, b.h];
-        }
+        var patchSize = patch.bounds().size;
+        maxSize = maxSize ? paper.Size.max(maxSize, patchSize) : patchSize;
       });
-      return max;
+      return maxSize;
     });
 
     function nextPatchIndex() {
@@ -78,7 +64,7 @@ define([
         imageData,
         0, 0,
         patch.bounds().x, patch.bounds().y,
-        patch.bounds().w, patch.bounds().h);
+        patch.bounds().width, patch.bounds().height);
     }
 
     self.onCanvasClick = function(e) {
