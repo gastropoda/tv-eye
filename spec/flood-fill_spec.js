@@ -8,15 +8,15 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
     var rect = {
       x: 1,
       y: 2,
-      w: 3,
-      h: 4
+      width: 3,
+      height: 4
     };
 
     function inRect(x, y) {
       return x >= rect.x &&
-        x < rect.x + rect.w &&
+        x < rect.x + rect.width &&
         y >= rect.y &&
-        y < rect.y + rect.h;
+        y < rect.y + rect.height;
     }
 
     beforeEach(function() {
@@ -28,7 +28,7 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
       context.fillStyle = "rgba(0,0,0,255)";
       context.fillRect(0, 0, canvasWidth, canvasHeight);
       context.fillStyle = "rgb(0,200,0)";
-      context.fillRect(rect.x, rect.y, rect.w, rect.h);
+      context.fillRect(rect.x, rect.y, rect.width, rect.height);
       image = context.getImageData(0, 0, canvasWidth, canvasHeight);
     });
 
@@ -52,7 +52,7 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
       });
 
       it("returns area", function() {
-        expect(floodFillResult.area).to.eq(rect.w * rect.h);
+        expect(floodFillResult.area).to.eq(rect.width * rect.height);
       });
 
       it("returns average color", function() {
@@ -73,15 +73,15 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
         context.globalCompositeOperation = "copy";
         // 0.165 corresponds to 8-bit 42
         context.fillStyle = "rgba(0,0,0,0.165)";
-        context.fillRect(rect.x, rect.y, rect.w, rect.h);
+        context.fillRect(rect.x, rect.y, rect.width, rect.height);
         image = context.getImageData(0, 0, canvasWidth, canvasHeight);
 
         floodFill.extend(image);
         image.replaceIndex(42, 7, {
           x: 0,
           y: 0,
-          w: rect.x + rect.w,
-          h: rect.y + rect.h - 1
+          width: rect.x + rect.width,
+          height: rect.y + rect.height - 1
         });
       });
 
@@ -91,7 +91,7 @@ define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
             r: 0,
             g: 0,
             b: 0,
-            a: !inRect(x, y) ? 255 : ( y < rect.y + rect.h - 1 ) ? 7 : 42
+            a: !inRect(x, y) ? 255 : ( y < rect.y + rect.height - 1 ) ? 7 : 42
           };
         });
       });
