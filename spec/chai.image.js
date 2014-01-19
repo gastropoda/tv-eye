@@ -33,4 +33,22 @@ define(["chai"], function(chai) {
     new Assertion(diffText, "pixels differ").to.be.eq("[]");
   });
 
+  Assertion.overwriteMethod("equal", function(_super) {
+    return function assertEquals(other) {
+      var obj = this._obj;
+      console.log(obj);
+      if (obj.equals instanceof Function) {
+        this.assert(obj.equals(other),
+          "expected #{act} to equal #{exp}",
+          "expected #{act} not to equal #{exp}",
+          other.toString(),
+          obj.toString()
+          );
+      }
+      else {
+        _super.apply(this, arguments);
+      }
+    };
+  });
+
 });
