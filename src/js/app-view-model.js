@@ -68,6 +68,7 @@ define([
         var patchViz = paper.Path.Rectangle({
           point: patch.bounds().point,
           size: patch.bounds().size,
+          radius: 5,
           strokeColor: "white"
         });
         uiLayer.addChild(patchViz);
