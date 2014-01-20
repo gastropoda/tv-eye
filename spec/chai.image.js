@@ -36,7 +36,6 @@ define(["chai"], function(chai) {
   Assertion.overwriteMethod("equal", function(_super) {
     return function assertEquals(other) {
       var obj = this._obj;
-      console.log(obj);
       if (obj.equals instanceof Function) {
         this.assert(obj.equals(other),
           "expected #{act} to equal #{exp}",
