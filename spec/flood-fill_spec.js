@@ -4,8 +4,8 @@ define(["flood-fill", "jquery", "chai", "paper"
   describe("FloodFill", function() {
 
     var canvas, context, image;
-    var resolution = new paper.Size(7, 7);
-    var rect = new paper.Rectangle(1, 2, 3, 4);
+    var resolution = new paper.Size(16, 18);
+    var rect = new paper.Rectangle(2, 3, 4, 5);
 
     beforeEach(function() {
       canvas = $("<canvas></canvas>")
@@ -21,7 +21,7 @@ define(["flood-fill", "jquery", "chai", "paper"
 
     describe(".floodFill()", function() {
       var floodFillResult;
-      var startPoint = new paper.Point(2, 2);
+      var startPoint = new paper.Point(3,4);
       var tolerance = 0;
       var paintIndex = 1;
 

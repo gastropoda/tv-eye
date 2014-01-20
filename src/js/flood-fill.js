@@ -34,11 +34,12 @@ define([
       var bounds;
 
       function updateBounds(xWest, xEast, y) {
+        var line = new paper.Rectangle(xWest, y, xEast - xWest + 1, 1);
         if (bounds) {
-          bounds = bounds.unite(new paper.Rectangle(xWest, y, xEast, 1));
+          bounds = bounds.unite(line);
         }
         else {
-          bounds = new paper.Rectangle(xWest, y, xEast - xWest, 1);
+          bounds = line;
         }
       }
 
