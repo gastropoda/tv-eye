@@ -13,6 +13,8 @@
         <li><b>max size:</b> <span data-bind="text: maxPatchSize"/></li>
       </ul>
 
+      <canvas resize/>
+
       <ul class="patches" data-bind="foreach: patches">
         <li class="patch-info" data-bind="css: {selected: selected}">Patch
         <a href="#" data-bind="click: $parent.removePatch">delete</a>

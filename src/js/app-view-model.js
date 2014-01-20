@@ -1,9 +1,8 @@
 define([
     /* captured by function args */
-    "jquery", "knockout", "flood-fill", "color-patch", "patch-list",
+    "jquery", "knockout", "paper", "flood-fill", "color-patch", "patch-list"
     /* not captured */
-    "paper", "jquery.image-canvas"
-], function($, ko, FloodFill, ColorPatch, PatchList) {
+], function($, ko, paper, FloodFill, ColorPatch, PatchList) {
 
   var NO_PATCH = 255;
 
@@ -13,7 +12,46 @@ define([
 
   return function AppViewModel() {
     var self = this;
-    var imageData, context;
+
+    self.config = {
+      pick: {
+        tolerance: 30
+      }
+    };
+
+    var canvas = $("#scratch canvas");
+    paper.setup(canvas.get(0));
+
+    var raster = new paper.Raster("img/groningen-test.jpg");
+    var imageData;
+
+    raster.onLoad = function() {
+      paper.view.setViewSize(this.size);
+      this.setPosition( this.size.divide(2) );
+      imageData = raster.getImageData();
+      FloodFill.extend(imageData);
+    };
+
+    raster.onClick = function(event) {
+      var point = event.point;
+      var color = this.getPixel(point);
+      var patchIndex = patchIndexFromColor(color);
+      if (patchIndex == NO_PATCH) {
+        var patch = self.findPatch(point);
+        patchList.put(patch);
+        refreshPatch(patch);
+      } else {
+        patchList.get(patchIndex).toggleSelected();
+      }
+    };
+
+    function patchIndexFromColor(color) {
+      return Math.floor(color.alpha * 255);
+    }
+
+    self.findPatch = function(point) {
+      return imageData.floodFill(point, self.config.pick.tolerance, nextPatchIndex());
+    };
 
     var patchList = new PatchList();
 
@@ -44,15 +82,6 @@ define([
       return patchList.nextIndex();
     }
 
-    self.findPatch = function(x, y) {
-      var patch = imageData.floodFill(x, y, 30, nextPatchIndex());
-      return new ColorPatch({
-        area: patch.area,
-        color: htmlizeColor(patch.averageColor),
-        bounds: patch.bounds
-      });
-    };
-
     self.removePatch = function(patch) {
       var index = patchList.remove(patch);
       imageData.replaceIndex(index, NO_PATCH, patch.bounds());
@@ -67,31 +96,7 @@ define([
         patch.bounds().width, patch.bounds().height);
     }
 
-    self.onCanvasClick = function(e) {
-      var x = e.offsetX;
-      var y = e.offsetY;
-      var c = imageData.color(x, y);
 
-      if (c.a == NO_PATCH) {
-        var patch = self.findPatch(x, y);
-        patchList.put(patch);
-        refreshPatch(patch);
-      }
-      else {
-        patchList.get(c.a).toggleSelected();
-      }
-
-    };
-
-    $("#scratch").loadImageCanvas("img/groningen-test.jpg", function(canvas) {
-      var canvasWidth = canvas.width();
-      var canvasHeight = canvas.height();
-      context = canvas.context2d();
-      imageData = context.getImageData(0, 0, canvasWidth, canvasHeight);
-      FloodFill.extend(imageData);
-      canvas.on("click", self.onCanvasClick);
-      canvas.hide().fadeIn(300);
-    });
   };
 
 });
