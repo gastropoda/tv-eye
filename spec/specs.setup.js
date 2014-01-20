@@ -11,6 +11,11 @@ require.config({
     chai: "/vendor/chai/chai",
     sinon: "/vendor/sinon/pkg/sinon",
     "sinon-chai": "/vendor/sinon-chai/lib/sinon-chai",
+  },
+  shims: {
+    "paper": {
+      exports: "paper"
+    }
   }
 });
 
