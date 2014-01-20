@@ -8,16 +8,15 @@ define(["flood-fill", "jquery", "chai", "paper"
     var rect = new paper.Rectangle(1, 2, 3, 4);
 
     beforeEach(function() {
-      canvas = $("<canvas/>")
-        .width(resolution.width).height(resolution.height)
-        .appendTo("#mocha");
+      canvas = $("<canvas></canvas>")
+        .width(resolution.width)
+        .height(resolution.height)
+        .appendTo("body");
       context = canvas.get(0).getContext("2d");
-      context.fillStyle = "rgba(0,0,0,255)";
+      context.fillStyle = "rgb(0,0,0)";
       context.fillRect(0, 0, resolution.width, resolution.height);
       context.fillStyle = "rgb(0,200,0)";
       context.fillRect(rect.x, rect.y, rect.width, rect.height);
-      image = context.getImageData(0, 0, resolution.width, resolution.height);
-      FloodFill.extend(image);
     });
 
     describe(".floodFill()", function() {
@@ -27,6 +26,8 @@ define(["flood-fill", "jquery", "chai", "paper"
       var paintIndex = 1;
 
       beforeEach(function() {
+        image = context.getImageData(0, 0, resolution.width, resolution.height);
+        FloodFill.extend(image);
         floodFillResult = image.floodFill(startPoint, tolerance, paintIndex);
       });
 
@@ -63,10 +64,15 @@ define(["flood-fill", "jquery", "chai", "paper"
       var changedRect = rect.intersect(replaceRect);
 
       beforeEach(function() {
+        // a lame ass way to fill it with particular value of alpha channel
+        context.beginPath();
+        context.rect(rect.x, rect.y, rect.width, rect.height);
+        context.clip();
         context.globalCompositeOperation = "copy";
         // 0.165 corresponds to 8-bit 42
         context.fillStyle = "rgba(0,0,0,0.165)";
         context.fillRect(rect.x, rect.y, rect.width, rect.height);
+
         image = context.getImageData(0, 0, resolution.width, resolution.height);
         FloodFill.extend(image);
         image.replaceIndex(42, 7, replaceRect);
@@ -79,7 +85,7 @@ define(["flood-fill", "jquery", "chai", "paper"
           b: 0
         };
         expect(image).to.contain.pixels(function(x, y) {
-          expected.a = changedRect.contains(x, y) ?  7 : rect.contains(x, y) ? 42 : 255;
+          expected.a = changedRect.contains(x, y) ? 7 : rect.contains(x, y) ? 42 : 255;
           return expected;
         });
       });
