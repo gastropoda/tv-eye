@@ -25,6 +25,8 @@ define([
     var raster = new paper.Raster("img/groningen-test.jpg");
     var imageData;
 
+    var uiLayer = new paper.Layer();
+
     raster.onLoad = function() {
       paper.view.setViewSize(this.size);
       this.setPosition( this.size.divide(2) );
@@ -38,7 +40,6 @@ define([
       if (patchIndex == NO_PATCH) {
         var patch = self.findPatch(point);
         patchList.put(patch);
-        console.log("TODO show patch");
       } else {
         patchList.get(patchIndex).toggleSelected();
       }
@@ -58,6 +59,19 @@ define([
     self.patches = patchList.patches;
     self.patchCount = ko.computed(function() {
       return self.patches().length;
+    });
+
+    self.patches.subscribe(function(patches){
+      console.log(patches);
+      uiLayer.removeChildren();
+      $.each(patches, function(i, patch) {
+        var patchViz = paper.Path.Rectangle({
+          point: patch.bounds().point,
+          size: patch.bounds().size,
+          strokeColor: "white"
+        });
+        uiLayer.addChild(patchViz);
+      });
     });
 
     self.minPatchSize = ko.computed(function() {
@@ -81,7 +95,6 @@ define([
     self.removePatch = function(patch) {
       var index = patchList.remove(patch);
       imageData.replaceIndex(index, NO_PATCH, patch.bounds());
-      log.console("TODO clear patch visualization");
     };
   };
 });
