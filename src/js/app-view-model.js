@@ -34,23 +34,23 @@ define([
 
     raster.onClick = function(event) {
       var point = event.point;
-      var color = this.getPixel(point);
-      var patchIndex = patchIndexFromColor(color);
+      var patchIndex = patchIndexAt(point);
       if (patchIndex == NO_PATCH) {
         var patch = self.findPatch(point);
         patchList.put(patch);
-        refreshPatch(patch);
+        console.log("TODO show patch");
       } else {
         patchList.get(patchIndex).toggleSelected();
       }
     };
 
-    function patchIndexFromColor(color) {
-      return Math.floor(color.alpha * 255);
+    function patchIndexAt(point) {
+      var rgba = imageData.data;
+      return rgba[ (point.x + point.y * imageData.width) * 4 + 3 ];
     }
 
     self.findPatch = function(point) {
-      return imageData.floodFill(point, self.config.pick.tolerance, nextPatchIndex());
+      return imageData.floodFill(point, self.config.pick.tolerance, patchList.nextIndex());
     };
 
     var patchList = new PatchList();
@@ -78,25 +78,10 @@ define([
       return maxSize;
     });
 
-    function nextPatchIndex() {
-      return patchList.nextIndex();
-    }
-
     self.removePatch = function(patch) {
       var index = patchList.remove(patch);
       imageData.replaceIndex(index, NO_PATCH, patch.bounds());
-      refreshPatch(patch);
+      log.console("TODO clear patch visualization");
     };
-
-    function refreshPatch(patch) {
-      context.putImageData(
-        imageData,
-        0, 0,
-        patch.bounds().x, patch.bounds().y,
-        patch.bounds().width, patch.bounds().height);
-    }
-
-
   };
-
 });
