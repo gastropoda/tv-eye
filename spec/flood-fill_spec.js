@@ -1,98 +1,86 @@
-define(["flood-fill", "jquery", "chai"], function(floodFill, $, chai) {
+define(["flood-fill", "jquery", "chai", "paper"
+], function(FloodFill, $, chai) {
 
   describe("FloodFill", function() {
 
     var canvas, context, image;
-    var canvasWidth = 7;
-    var canvasHeight = 7;
-    var rect = {
-      x: 1,
-      y: 2,
-      width: 3,
-      height: 4
-    };
-
-    function inRect(x, y) {
-      return x >= rect.x &&
-        x < rect.x + rect.width &&
-        y >= rect.y &&
-        y < rect.y + rect.height;
-    }
+    var resolution = new paper.Size(7, 7);
+    var rect = new paper.Rectangle(1, 2, 3, 4);
 
     beforeEach(function() {
       canvas = $("<canvas/>")
-        .attr("id", "scratch")
-        .width(canvasWidth).height(canvasHeight)
+        .width(resolution.width).height(resolution.height)
         .appendTo("#mocha");
       context = canvas.get(0).getContext("2d");
       context.fillStyle = "rgba(0,0,0,255)";
-      context.fillRect(0, 0, canvasWidth, canvasHeight);
+      context.fillRect(0, 0, resolution.width, resolution.height);
       context.fillStyle = "rgb(0,200,0)";
       context.fillRect(rect.x, rect.y, rect.width, rect.height);
-      image = context.getImageData(0, 0, canvasWidth, canvasHeight);
+      image = context.getImageData(0, 0, resolution.width, resolution.height);
+      FloodFill.extend(image);
     });
 
     describe(".floodFill()", function() {
       var floodFillResult;
+      var startPoint = new paper.Point(2, 2);
+      var tolerance = 0;
+      var paintIndex = 1;
 
       beforeEach(function() {
-        floodFill.extend(image);
-        floodFillResult = image.floodFill(2, 2, 0, 1);
+        floodFillResult = image.floodFill(startPoint, tolerance, paintIndex);
       });
 
       it("fills the color", function() {
         expect(image).to.contain.pixels(function(x, y) {
           return {
             r: 0,
-            g: inRect(x, y) ? 200 : 0,
+            g: rect.contains(x, y) ? 200 : 0,
             b: 0,
-            a: inRect(x, y) ? 1 : 255,
+            a: rect.contains(x, y) ? 1 : 255,
           };
         });
       });
 
-      it("returns area", function() {
-        expect(floodFillResult.area).to.eq(rect.width * rect.height);
+      it("returns patch area", function() {
+        expect(floodFillResult.area()).to.eq(rect.width * rect.height);
       });
 
-      it("returns average color", function() {
-        expect(floodFillResult.averageColor).to.eql({
+      it("returns patch color", function() {
+        expect(floodFillResult.color()).to.eql({
           r: 0,
           g: 200,
           b: 0
         });
       });
 
-      it("returns bounds", function() {
-        expect(floodFillResult.bounds).to.eql(rect);
+      it("returns patch bounds", function() {
+        expect(floodFillResult.bounds()).to.equal(rect);
       });
     });
 
     describe(".replaceIndex()", function() {
+      var replaceRect = new paper.Rectangle(0, 0, rect.x + rect.width, rect.y + rect.height - 1);
+      var changedRect = rect.intersect(replaceRect);
+
       beforeEach(function() {
         context.globalCompositeOperation = "copy";
         // 0.165 corresponds to 8-bit 42
         context.fillStyle = "rgba(0,0,0,0.165)";
         context.fillRect(rect.x, rect.y, rect.width, rect.height);
-        image = context.getImageData(0, 0, canvasWidth, canvasHeight);
-
-        floodFill.extend(image);
-        image.replaceIndex(42, 7, {
-          x: 0,
-          y: 0,
-          width: rect.x + rect.width,
-          height: rect.y + rect.height - 1
-        });
+        image = context.getImageData(0, 0, resolution.width, resolution.height);
+        FloodFill.extend(image);
+        image.replaceIndex(42, 7, replaceRect);
       });
 
       it("replaces index within the ROI", function() {
+        var expected = {
+          r: 0,
+          g: 0,
+          b: 0
+        };
         expect(image).to.contain.pixels(function(x, y) {
-          return {
-            r: 0,
-            g: 0,
-            b: 0,
-            a: !inRect(x, y) ? 255 : ( y < rect.y + rect.height - 1 ) ? 7 : 42
-          };
+          expected.a = changedRect.contains(x, y) ?  7 : rect.contains(x, y) ? 42 : 255;
+          return expected;
         });
       });
     });

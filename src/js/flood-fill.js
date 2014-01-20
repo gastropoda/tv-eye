@@ -1,4 +1,7 @@
-define(["paper"], function() {
+define([
+    "paper", "color-patch",
+    "ext.paper"
+], function(paper, ColorPatch) {
 
   function extend(imageData) {
     var self = imageData;
@@ -14,7 +17,9 @@ define(["paper"], function() {
       };
     };
 
-    self.floodFill = function(x, y, tolerance, markValue) {
+    self.floodFill = function(point, tolerance, markValue) {
+      var x = point.x;
+      var y = point.y;
       var width = self.width;
       var height = self.height;
       var rgba = self.data;
@@ -27,11 +32,13 @@ define(["paper"], function() {
       };
       var area = 0;
       var bounds;
-      function updateBounds(xWest,xEast,y) {
+
+      function updateBounds(xWest, xEast, y) {
         if (bounds) {
-          bounds = bounds.unite(new paper.Rectangle(xWest,y,xEast,1));
-        } else {
-          bounds = new paper.Rectangle(xWest,y,xEast-xWest,1);
+          bounds = bounds.unite(new paper.Rectangle(xWest, y, xEast, 1));
+        }
+        else {
+          bounds = new paper.Rectangle(xWest, y, xEast - xWest, 1);
         }
       }
 
@@ -57,7 +64,7 @@ define(["paper"], function() {
           while (xEast < self.width - 1 && floodFillTest(xEast + 1, y)) {
             xEast++;
           }
-          updateBounds(xWest,xEast,y);
+          updateBounds(xWest, xEast, y);
           for (var x = xWest; x <= xEast; x++) {
             area++;
             acc.r += rgba[(x + y * self.width) * 4];
@@ -74,15 +81,15 @@ define(["paper"], function() {
           }
         }
       }
-      return {
+      return new ColorPatch({
         area: area,
-        averageColor: {
+        color: {
           r: Math.floor(acc.r / area),
           g: Math.floor(acc.g / area),
           b: Math.floor(acc.b / area),
         },
         bounds: bounds
-      };
+      });
     };
 
     self.replaceIndex = function(inIndex, outIndex, roi) {

@@ -7,8 +7,8 @@ define(["chai"], function(chai) {
     var w = image.width;
     var h = image.height;
     var diff = [];
-    for (var y = 0; y < w; y++) {
-      for (var x = 0; x < h; x++) {
+    for (var y = 0; y < h; y++) {
+      for (var x = 0; x < w; x++) {
         var actualPixel = {
           r: rgba[(x + y * w) * 4],
           g: rgba[(x + y * w) * 4 + 1],
@@ -16,14 +16,14 @@ define(["chai"], function(chai) {
           a: rgba[(x + y * w) * 4 + 3],
         };
         var expectedPixel = pixels(x, y);
-        if (actualPixel.r != expectedPixel.r ||
-          actualPixel.g != expectedPixel.g ||
-          actualPixel.b != expectedPixel.b ||
-          actualPixel.a != expectedPixel.a) {
+        if (actualPixel.r !== expectedPixel.r ||
+          actualPixel.g !== expectedPixel.g ||
+          actualPixel.b !== expectedPixel.b ||
+          actualPixel.a !== expectedPixel.a) {
           diff.push({
             at: [x, y],
-            actual: actualPixel,
             expected: expectedPixel,
+            actual: actualPixel,
           });
         }
       }
