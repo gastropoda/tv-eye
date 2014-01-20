@@ -19,7 +19,7 @@ define([
       }
     };
 
-    var canvas = $("#scratch canvas");
+    var canvas = $("<canvas/>").appendTo("#scratch");
     paper.setup(canvas.get(0));
 
     var raster = new paper.Raster("img/groningen-test.jpg");
