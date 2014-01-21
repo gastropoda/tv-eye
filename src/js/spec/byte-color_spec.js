@@ -70,6 +70,14 @@ define(["byte-color"], function(ByteColor) {
         color = color.accumulate(delta);
         expect(color.alpha).to.eq(initialAlpha);
       });
+      it("supports parial colors", function() {
+        var newColor = color.accumulate({
+          red: 5
+        });
+        expect(newColor.red).to.eq(5);
+        expect(newColor.green).to.eq(0);
+        expect(newColor.blue).to.eq(0);
+      });
     });
 
     describe(".attenuate()", function() {
@@ -97,10 +105,34 @@ define(["byte-color"], function(ByteColor) {
       var otherColor = new ByteColor(30, 20, 10);
 
       it("is truthy for same colors", function() {
-        expect( color.equals(sameColor) ).to.be.true;
+        expect(color.equals(sameColor)).to.be.true;
       });
       it("is falsy for different colors", function() {
-        expect( color.equals(otherColor) ).to.be.false;
+        expect(color.equals(otherColor)).to.be.false;
+      });
+    });
+
+    describe(".within()", function() {
+      var tolerance = 10;
+      var color = new ByteColor(127, 20, 30);
+      var closeColor = color.accumulate({
+        red: tolerance / 2
+      });
+      var edgeColor = color.accumulate({
+        red: tolerance
+      });
+      var farColor = color.accumulate({
+        red: tolerance * 2
+      });
+
+      it("is true for colors within tolerance", function() {
+        expect(color.within(tolerance, closeColor)).to.be.true;
+      });
+      it("is false for colors outside tolerance", function() {
+        expect(color.within(tolerance, farColor)).to.be.false;
+      });
+      it("is true for colors at the edge of tolerance", function() {
+        expect(color.within(tolerance, edgeColor)).to.be.true;
       });
     });
   });

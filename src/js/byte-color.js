@@ -31,6 +31,7 @@ define([
 
   $.extend(true, ByteColor.prototype, {
     accumulate: function(delta) {
+      delta = new ByteColor(delta);
       return new ByteColor(
         this.red + delta.red,
         this.green + delta.green,
@@ -51,7 +52,13 @@ define([
         this.green === other.green &&
         this.blue === other.blue &&
         this.alpha === other.alpha;
-    }
+    },
+
+    within: function(tolerance, other) {
+      return Math.abs( this.red - other.red ) <= tolerance &&
+        Math.abs( this.green - other.green ) <= tolerance &&
+        Math.abs( this.blue - other.blue ) <= tolerance;
+    },
   });
 
   return ByteColor;

@@ -47,10 +47,7 @@ define([
 
       function floodFillTest(x, y) {
         var pixelColor = self.color(x, y);
-        return pixelColor.alpha == 255 &&
-          (Math.abs(pixelColor.red - targetColor.red) <= tolerance) &&
-          (Math.abs(pixelColor.green - targetColor.green) <= tolerance) &&
-          (Math.abs(pixelColor.blue - targetColor.blue) <= tolerance);
+        return pixelColor.alpha == 255 && pixelColor.within(tolerance, targetColor);
       };
 
       var queue = [[x, y]];
