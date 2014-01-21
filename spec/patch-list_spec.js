@@ -30,17 +30,20 @@ define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
 
       describe("with some patches", function() {
         it("returns the patches", function() {
-          expect(patchList().patches()).to.eql(somePatches);
+          var patchListContents = patchList().patches().slice();
+          expect(patchListContents).to.eql(somePatches);
         });
 
         it("filters out nulls", function() {
           somePatches[1] = null;
-          expect(patchList().patches()).to.eql([somePatches[0], somePatches[2]]);
+          var patchListContents = patchList().patches().slice();
+          expect(patchListContents).to.eql([somePatches[0], somePatches[2]]);
         });
 
         it("filters out deselected patches", function() {
           somePatches[1].toggleSelected();
-          expect(patchList().patches()).to.eql([somePatches[0], somePatches[2]]);
+          var patchListContents = patchList().patches().slice();
+          expect(patchListContents).to.eql([somePatches[0], somePatches[2]]);
         });
       });
     });

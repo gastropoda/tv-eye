@@ -4,10 +4,27 @@ define(["knockout"], function(ko) {
     var self = this;
     var patches = ko.observableArray(initialContents || []);
 
+    var PatchArrayMixin = {
+      minSize: function() {
+        return this.length &&
+          this.map(function(patch) {
+          return patch.bounds().size;
+        }).reduce(paper.Size.max);
+      },
+      maxSize: function() {
+        return this.length &&
+          this.map(function(patch) {
+          return patch.bounds().size;
+        }).reduce(paper.Size.max);
+      },
+    };
+
     self.patches = ko.computed(function() {
-      return patches().filter(function(patch) {
+      var selectedPatches = patches().filter(function(patch) {
         return patch && patch.selected();
       });
+
+      return $.extend(selectedPatches, PatchArrayMixin);
     });
 
     self.get = function(i) {
@@ -18,7 +35,7 @@ define(["knockout"], function(ko) {
       var i = patchOrIndex;
       if (isNaN(i)) {
         i = patches().indexOf(i);
-        if (i<0) {
+        if (i < 0) {
           throw "No such patch";
         }
       }

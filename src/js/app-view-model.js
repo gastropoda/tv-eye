@@ -6,10 +6,6 @@ define([
 
   var NO_PATCH = 255;
 
-  function htmlizeColor(c) {
-    return "rgb(" + [c.r, c.g, c.b].join(",") + ")";
-  }
-
   return function AppViewModel() {
     var self = this;
 
@@ -62,7 +58,6 @@ define([
     });
 
     self.patches.subscribe(function(patches){
-      console.log(patches);
       uiLayer.removeChildren();
       $.each(patches, function(i, patch) {
         var patchViz = paper.Path.Rectangle({
@@ -76,21 +71,11 @@ define([
     });
 
     self.minPatchSize = ko.computed(function() {
-      var minSize;
-      self.patches().forEach(function(patch) {
-        var patchSize = patch.bounds().size;
-        minSize = minSize ? paper.Size.min(minSize, patchSize) : patchSize;
-      });
-      return minSize;
+      return self.patches().minSize();
     });
 
     self.maxPatchSize = ko.computed(function() {
-      var maxSize;
-      self.patches().forEach(function(patch) {
-        var patchSize = patch.bounds().size;
-        maxSize = maxSize ? paper.Size.max(maxSize, patchSize) : patchSize;
-      });
-      return maxSize;
+      return self.patches().maxSize();
     });
 
     self.removePatch = function(patch) {
