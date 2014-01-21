@@ -1,6 +1,6 @@
 define([
-    "jquery"
-], function($) {
+    "jquery", "paper"
+], function($, paper) {
 
   function ByteColor() {
     if (arguments.length > 2) {
@@ -55,10 +55,14 @@ define([
     },
 
     within: function(tolerance, other) {
-      return Math.abs( this.red - other.red ) <= tolerance &&
-        Math.abs( this.green - other.green ) <= tolerance &&
-        Math.abs( this.blue - other.blue ) <= tolerance;
+      return Math.abs(this.red - other.red) <= tolerance &&
+        Math.abs(this.green - other.green) <= tolerance &&
+        Math.abs(this.blue - other.blue) <= tolerance;
     },
+
+    toPaperColor: function() {
+      return new paper.Color(this.red / 255, this.green / 255, this.blue / 255, this.alpha / 255);
+    }
   });
 
   return ByteColor;

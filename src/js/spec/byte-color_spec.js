@@ -135,5 +135,16 @@ define(["byte-color"], function(ByteColor) {
         expect(color.within(tolerance, edgeColor)).to.be.true;
       });
     });
+
+    describe(".toPaperColor()", function() {
+      var color = new ByteColor( 50, 60, 70 );
+      var paperColor = color.toPaperColor();
+      it("converts bytes to floats in [0,1]", function() {
+        expect(paperColor.red).to.eq(color.red/255);
+        expect(paperColor.green).to.eq(color.green/255);
+        expect(paperColor.blue).to.eq(color.blue/255);
+        expect(paperColor.alpha).to.eq(1.0);
+      });
+    });
   });
 });
