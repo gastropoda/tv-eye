@@ -1,5 +1,7 @@
 define([
-], function() {
+    "jquery"
+], function($) {
+
   function ByteColor() {
     if (arguments.length > 2) {
       this.red = arguments[0];
@@ -20,7 +22,26 @@ define([
       }
     }
   };
-  var defaultColor = { red: 0, green: 0, blue: 0, alpha: 255 };
+  var defaultColor = {
+    red: 0,
+    green: 0,
+    blue: 0,
+    alpha: 255
+  };
+
+  $.extend(true,ByteColor.prototype,{
+    accumulate: function( delta ) {
+      this.red += delta.red;
+      this.green += delta.green;
+      this.blue += delta.blue;
+    },
+
+    attenuate: function(divisor) {
+      this.red = Math.floor( this.red / divisor );
+      this.green = Math.floor( this.green / divisor );
+      this.blue = Math.floor( this.blue / divisor );
+    }
+  });
 
   return ByteColor;
 });
