@@ -2,17 +2,21 @@ define([
   "shade"
 ], function(Shade) {
   describe("Shade", function() {
-    var colors = [{}, {}, {}];
-    var shade = new Shade(colors[0], colors[1], colors[2]);
-    var inputColor = {}
+    var colors, mergeThreshold, shade, inputColor;
+
+    beforeEach(function() {
+      mergeThreshold = 10;
+      colors = [{}, {}, {}];
+      shade = new Shade({colors: colors, mergeThreshold: mergeThreshold});
+      inputColor = {};
+    });
 
     describe("constructor", function() {
-      it("assigns args to colors", function() {
-        expect(shade.colors()).to.eql(colors);
+      it("assigns colors", function() {
+        expect(shade.colors).to.eql(colors);
       });
-
-      it("configures thresholds", function() {
-
+      it("assigns mergeThreshold", function() {
+        expect(shade.mergeThreshold).to.eql(mergeThreshold);
       });
     });
 
@@ -31,5 +35,6 @@ define([
         expect(new Shade().distance(inputColor)).to.eq(Infinity);
       });
     });
+
   });
 });
