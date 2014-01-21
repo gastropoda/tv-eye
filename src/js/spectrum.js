@@ -5,12 +5,13 @@ define([
     options = options || {};
     this.shades = options.shades;
     this.discriminationTolerance = options.discriminationTolerance;
+    this.calibrationTolerance = options.calibrationTolerance;
   }
 
   $.extend(Spectrum.prototype, {
 
-    classifyColor: function( color, adopt ) {
-      var minDistance = this.discriminationTolerance;
+    classifyColor: function( color, calibrate ) {
+      var minDistance = calibrate ? this.calibrationTolerance : this.discriminationTolerance;
       var closestShade = null;
 
       $.each(this.shades, function(i, shade) {
@@ -21,8 +22,8 @@ define([
         }
       });
 
-      if (adopt && closestShade) {
-        closestShade.adopt( color );
+      if (calibrate && closestShade) {
+        closestShade.calibrate( color );
       }
       return closestShade;
     }
