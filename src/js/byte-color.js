@@ -62,6 +62,14 @@ define([
 
     toPaperColor: function() {
       return new paper.Color(this.red / 255, this.green / 255, this.blue / 255, this.alpha / 255);
+    },
+
+    toString: function() {
+      return this.toPaperColor().toCSS(true);
+    },
+
+    toCSS: function(hex) {
+      return this.toPaperColor().toCSS(hex);
     }
   });
 

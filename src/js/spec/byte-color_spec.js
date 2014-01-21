@@ -146,5 +146,21 @@ define(["byte-color"], function(ByteColor) {
         expect(paperColor.alpha).to.eq(1.0);
       });
     });
+
+    describe("string conversions via paper color", function() {
+      var color = new ByteColor( 50, 60, 70 );
+      var colorSpy = {
+        toCSS: sinon.spy()
+      };
+      sinon.stub(color,"toPaperColor").returns(colorSpy);
+      it("delegates .toString() to paper color's toCSS(true)", function() {
+        color.toString();
+        expect(colorSpy.toCSS).to.have.been.calledWith(true);
+      });
+      it("delegates .toCSS() to paper color", function() {
+        color.toCSS("hex");
+        expect(colorSpy.toCSS).to.have.been.calledWith("hex");
+      });
+    });
   });
 });
