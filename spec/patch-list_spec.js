@@ -18,6 +18,7 @@ define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
     function patchList() {
       return _patchList_ || (_patchList_ = new PatchList(somePatches));
     }
+
     function fullList() {
       sinon.stub(patchList(), "maxCount").returns(somePatches.length);
       return patchList();
@@ -44,6 +45,30 @@ define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
           somePatches[1].toggleSelected();
           var patchListContents = patchList().patches().slice();
           expect(patchListContents).to.eql([somePatches[0], somePatches[2]]);
+        });
+
+        describe("patch array mixin", function() {
+          var minSize = new paper.Size(5, 15);
+          var maxSize = new paper.Size(15,25);
+          beforeEach(function() {
+            somePatches = [
+              new ColorPatch({
+                bounds: new paper.Rectangle(0, 0, 10, 20)
+              }),
+              new ColorPatch({
+                bounds: new paper.Rectangle(0, 0, 5, 25)
+              }),
+              new ColorPatch({
+                bounds: new paper.Rectangle(0, 0, 15, 15)
+              })
+            ];
+          });
+          it("provides .minSize()", function() {
+            expect(patchList().patches().minSize()).to.equal(minSize);
+          });
+          it("provides .maxSize()", function() {
+            expect(patchList().patches().maxSize()).to.equal(maxSize);
+          });
         });
       });
     });
@@ -83,13 +108,15 @@ define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
       it("throws an exception if index out of bounds", function() {
         expect(function() {
           patchList().remove(42);
-        }).to.throw(/out of bounds/);
+        }).to.
+        throw (/out of bounds/);
       });
 
       it("throws an exception if patch is not in the list", function() {
         expect(function() {
           patchList().remove(newPatch);
-        }).to.throw(/No such patch/);
+        }).to.
+        throw (/No such patch/);
       });
     });
 
@@ -115,16 +142,16 @@ define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
     describe(".put()", function() {
       it("puts a patch at nextIndex", function() {
         sinon.stub(patchList(), "nextIndex").returns(42);
-        patchList().put( newPatch );
+        patchList().put(newPatch);
         expect(patchList().get(42)).to.eq(newPatch);
       });
 
       it("throws an exception if list is full", function() {
-        expect( function() {
-          fullList.put( newPatch );
-        }).to.throw(/full/);
+        expect(function() {
+          fullList.put(newPatch);
+        }).to.
+        throw (/full/);
       });
     });
-
   });
 });

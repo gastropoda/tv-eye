@@ -9,7 +9,7 @@ define(["knockout"], function(ko) {
         return this.length &&
           this.map(function(patch) {
           return patch.bounds().size;
-        }).reduce(paper.Size.max);
+        }).reduce(paper.Size.min);
       },
       maxSize: function() {
         return this.length &&
