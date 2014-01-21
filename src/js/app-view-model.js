@@ -7,15 +7,10 @@ define([
   ColorPatchesLayer) {
 
   var NO_PATCH = 255;
+  var PICK_TOLERANCE = 30;
 
   function AppViewModel() {
     var self = this;
-
-    self.config = {
-      pick: {
-        tolerance: 30
-      }
-    };
 
     paper.setup($("<canvas/>").appendTo("#scratch").get(0));
 
@@ -39,15 +34,6 @@ define([
       }
     };
 
-    function patchIndexAt(point) {
-      var rgba = imageData.data;
-      return rgba[(point.x + point.y * imageData.width) * 4 + 3];
-    }
-
-    self.findPatch = function(point) {
-      return imageData.floodFill(point, self.config.pick.tolerance, patchList.nextIndex());
-    };
-
     var patchList = new PatchList();
     self.patches = patchList.patches;
     self.patchCount = ko.computed(function() {
@@ -59,6 +45,13 @@ define([
     self.maxPatchSize = ko.computed(function() {
       return self.patches().maxSize();
     });
+    function patchIndexAt(point) {
+      var rgba = imageData.data;
+      return rgba[(point.x + point.y * imageData.width) * 4 + 3];
+    }
+    self.findPatch = function(point) {
+      return imageData.floodFill(point, PICK_TOLERANCE, patchList.nextIndex());
+    };
     self.removePatch = function(patch) {
       var index = patchList.remove(patch);
       imageData.replaceIndex(index, NO_PATCH, patch.bounds());
