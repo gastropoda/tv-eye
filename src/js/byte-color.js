@@ -29,26 +29,28 @@ define([
     alpha: 255
   };
 
-  $.extend(true,ByteColor.prototype,{
-    accumulate: function( delta ) {
-      this.red += delta.red;
-      this.green += delta.green;
-      this.blue += delta.blue;
-      return this;
+  $.extend(true, ByteColor.prototype, {
+    accumulate: function(delta) {
+      return new ByteColor(
+        this.red + delta.red,
+        this.green + delta.green,
+        this.blue + delta.blue,
+        this.alpha);
     },
 
     attenuate: function(divisor) {
-      this.red = Math.floor( this.red / divisor );
-      this.green = Math.floor( this.green / divisor );
-      this.blue = Math.floor( this.blue / divisor );
-      return this;
+      return new ByteColor(
+        Math.floor(this.red / divisor),
+        Math.floor(this.green / divisor),
+        Math.floor(this.blue / divisor),
+        this.alpha);
     },
 
     equals: function(other) {
       return this.red === other.red &&
-             this.green === other.green &&
-             this.blue === other.blue &&
-             this.alpha === other.alpha;
+        this.green === other.green &&
+        this.blue === other.blue &&
+        this.alpha === other.alpha;
     }
   });
 

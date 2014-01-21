@@ -71,7 +71,7 @@ define([
           for (var x = xWest; x <= xEast; x++) {
             var pixel = this.color(x,y);
             area++;
-            acc.accumulate(pixel);
+            acc = acc.accumulate(pixel);
             this.setColor(x, y, {alpha: markValue});
 
             if (y > 0 && floodFillTest(x, y - 1)) {
