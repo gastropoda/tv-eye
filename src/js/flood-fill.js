@@ -1,28 +1,39 @@
 define([
-    "paper", "color-patch"
-], function(paper, ColorPatch) {
+    "paper", "jquery", "color-patch"
+], function(paper, $, ColorPatch) {
 
-  function extend(imageData) {
-    var self = imageData;
-    var rgba = self.data;
-
-    self.color = function(x, y) {
-      var offset = 4 * (x + self.width * y);
+  var FloodFillMixin = {
+    color: function(x, y) {
+      var offset = (x + this.width * y) * 4;
+      var rgba = this.data;
       return {
         r: rgba[offset],
         g: rgba[offset + 1],
         b: rgba[offset + 2],
         a: rgba[offset + 3],
       };
-    };
+    },
 
-    self.floodFill = function(point, tolerance, markValue) {
+    setColor: function(x, y, obj) {
+      if (!(obj instanceof Array)) {
+        obj = [obj.r, obj.g, obj.b, obj.a];
+      }
+      var offset = (x + this.width * y) * 4;
+      var rgba = this.data;
+      $.each(obj, function(i, value) {
+        if (!isNaN(value)) {
+          rgba[ offset + i ] = value;
+        }
+      });
+    },
+
+    floodFill: function(point, tolerance, markValue) {
       var x = point.x;
       var y = point.y;
-      var width = self.width;
-      var height = self.height;
-      var rgba = self.data;
-      var targetColor = self.color(x, y);
+      var width = this.width;
+      var height = this.height;
+      var targetColor = this.color(x, y);
+      var self = this;
 
       var acc = {
         r: 0,
@@ -61,21 +72,22 @@ define([
             xWest--;
           }
 
-          while (xEast < self.width - 1 && floodFillTest(xEast + 1, y)) {
+          while (xEast < this.width - 1 && floodFillTest(xEast + 1, y)) {
             xEast++;
           }
           updateBounds(xWest, xEast, y);
           for (var x = xWest; x <= xEast; x++) {
+            var pixel = this.color(x,y);
             area++;
-            acc.r += rgba[(x + y * self.width) * 4];
-            acc.g += rgba[(x + y * self.width) * 4 + 1];
-            acc.b += rgba[(x + y * self.width) * 4 + 2];
-            rgba[(x + y * self.width) * 4 + 3] = markValue;
+            acc.r += pixel.r;
+            acc.g += pixel.g;
+            acc.b += pixel.b;
+            this.setColor(x, y, {a: markValue});
 
             if (y > 0 && floodFillTest(x, y - 1)) {
               queue.push([x, y - 1]);
             }
-            if (y < self.height - 1 && floodFillTest(x, y + 1)) {
+            if (y < this.height - 1 && floodFillTest(x, y + 1)) {
               queue.push([x, y + 1]);
             }
           }
@@ -90,20 +102,24 @@ define([
         },
         bounds: bounds
       });
-    };
+    },
 
-    self.replaceIndex = function(inIndex, outIndex, roi) {
+    replaceIndex: function(inIndex, outIndex, roi) {
       for (var y = roi.y; y < roi.y + roi.height; y++) {
         for (var x = roi.x; x < roi.x + roi.width; x++) {
-          var offset = (x + y * self.width) * 4 + 3;
-          if (rgba[offset] === inIndex)
-            rgba[offset] = outIndex;
+          var offset = (x + y * this.width) * 4 + 3;
+          if (this.data[offset] === inIndex)
+            this.data[offset] = outIndex;
         }
       }
-    };
+    }
   }
 
   return {
-    extend: extend
+    extend: function(imageData) {
+      $.extend(imageData, FloodFillMixin);
+    }
   };
+
+
 });
