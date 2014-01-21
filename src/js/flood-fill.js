@@ -1,6 +1,5 @@
 define([
-    "paper", "color-patch",
-    "ext.paper"
+    "paper", "color-patch"
 ], function(paper, ColorPatch) {
 
   function extend(imageData) {

@@ -1,4 +1,4 @@
-define(["paper"], function() {
+define(["paper"], function(paper) {
   paper.Rectangle.prototype._containsPoint = function(point) {
 		var x = point.x,
 			y = point.y;
@@ -6,4 +6,5 @@ define(["paper"], function() {
 				&& x < this.x + this.width
 				&& y < this.y + this.height;
 	};
+  return paper;
 });

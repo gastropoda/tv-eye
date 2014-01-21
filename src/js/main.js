@@ -4,9 +4,12 @@ require.config({
     knockout: 'lib/knockout-3.0.0',
     paper: 'lib/paper-full-0.9.15',
   },
-  shims: {
-    "paper": {
-      exports: "paper"
+  map: {
+    "*": {
+      paper: "patch/paper"
+    },
+    "patch/paper": {
+      paper: "paper"
     }
   }
 });

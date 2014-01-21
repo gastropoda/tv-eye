@@ -1,5 +1,4 @@
 (function() {
-
   requirejs.config({
     baseUrl: "/base/js",
 
@@ -9,9 +8,12 @@
       paper: "lib/paper-full-0.9.15"
     },
 
-    shims: {
-      "paper": {
-        exports: "paper"
+    map: {
+      "*": {
+        paper: "patch/paper"
+      },
+      "patch/paper": {
+        paper: "paper"
       }
     },
 
