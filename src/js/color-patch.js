@@ -1,15 +1,17 @@
 define(["knockout"], function(ko) {
-  return function ColorPatch(options) {
-    var self = this;
+  function ColorPatch(options) {
     options = options || {};
-
-    self.selected = ko.observable( true );
-    self.area = ko.observable( options.area );
-    self.color = ko.observable( options.color );
-    self.bounds = ko.observable( options.bounds );
-
-    self.toggleSelected = function() {
-      return self.selected( !self.selected() );
-    }
+    this.selected = ko.observable( true );
+    this.area = ko.observable( options.area );
+    this.color = ko.observable( options.color );
+    this.bounds = ko.observable( options.bounds );
   };
+
+  $.extend( true, ColorPatch.prototype, {
+    toggleSelected: function() {
+      return this.selected( !this.selected() );
+    }
+  });
+
+  return ColorPatch;
 });
