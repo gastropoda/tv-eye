@@ -1,4 +1,6 @@
-define(["knockout","paper"], function(ko,paper) {
+define([
+    "knockout", "paper"
+], function(ko, paper) {
 
   function setup(observablePatches) {
     var uiLayer = new paper.Layer();

@@ -1,5 +1,5 @@
-define(["flood-fill", "jquery", "chai", "paper"
-], function(FloodFill, $, chai) {
+define(["flood-fill", "jquery", "paper"
+], function(FloodFill, $, paper) {
 
   describe("FloodFill", function() {
 

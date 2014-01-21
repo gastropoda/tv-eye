@@ -1,4 +1,4 @@
-define(["knockout"], function(ko) {
+define(["knockout","paper"], function(ko,paper) {
   return function PatchList(initialContents) {
 
     var self = this;

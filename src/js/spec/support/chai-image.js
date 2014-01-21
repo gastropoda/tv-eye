@@ -1,4 +1,4 @@
-define(["chai"], function(chai) {
+(function() {
   var Assertion = chai.Assertion;
 
   Assertion.addMethod("pixels", function(pixels) {
@@ -41,13 +41,11 @@ define(["chai"], function(chai) {
           "expected #{act} to equal #{exp}",
           "expected #{act} not to equal #{exp}",
           other.toString(),
-          obj.toString()
-          );
+          obj.toString());
       }
       else {
         _super.apply(this, arguments);
       }
     };
   });
-
-});
+})();

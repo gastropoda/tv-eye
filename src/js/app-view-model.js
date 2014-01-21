@@ -1,10 +1,10 @@
 define([
     /* captured by function args */
-    "jquery", "knockout", "paper", "flood-fill", "color-patch", "patch-list",
-    "color-patches-layer"
+    "jquery", "knockout", "paper", "flood-fill", "color-patch",
+    "patch-list", "color-patches-layer"
     /* not captured */
-], function($, ko, paper, FloodFill, ColorPatch, PatchList,
-  ColorPatchesLayer) {
+], function($, ko, paper, FloodFill, ColorPatch,
+  PatchList, ColorPatchesLayer) {
 
   var NO_PATCH = 255;
   var PICK_TOLERANCE = 30;
@@ -45,6 +45,7 @@ define([
     self.maxPatchSize = ko.computed(function() {
       return self.patches().maxSize();
     });
+
     function patchIndexAt(point) {
       var rgba = imageData.data;
       return rgba[(point.x + point.y * imageData.width) * 4 + 3];

@@ -1,4 +1,6 @@
-define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
+define([
+    "patch-list", "color-patch"
+], function(PatchList, ColorPatch) {
   describe("PatchList", function() {
     var _patchList_;
     var ko = require("knockout");
@@ -49,7 +51,7 @@ define(["patch-list", "color-patch"], function(PatchList, ColorPatch) {
 
         describe("patch array mixin", function() {
           var minSize = new paper.Size(5, 15);
-          var maxSize = new paper.Size(15,25);
+          var maxSize = new paper.Size(15, 25);
           beforeEach(function() {
             somePatches = [
               new ColorPatch({
