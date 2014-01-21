@@ -10,16 +10,16 @@
     for (var y = 0; y < h; y++) {
       for (var x = 0; x < w; x++) {
         var actualPixel = {
-          r: rgba[(x + y * w) * 4],
-          g: rgba[(x + y * w) * 4 + 1],
-          b: rgba[(x + y * w) * 4 + 2],
-          a: rgba[(x + y * w) * 4 + 3],
+          red: rgba[(x + y * w) * 4],
+          green: rgba[(x + y * w) * 4 + 1],
+          blue: rgba[(x + y * w) * 4 + 2],
+          alpha: rgba[(x + y * w) * 4 + 3],
         };
         var expectedPixel = pixels(x, y);
-        if (actualPixel.r !== expectedPixel.r ||
-          actualPixel.g !== expectedPixel.g ||
-          actualPixel.b !== expectedPixel.b ||
-          actualPixel.a !== expectedPixel.a) {
+        if (actualPixel.red !== expectedPixel.red ||
+          actualPixel.green !== expectedPixel.green ||
+          actualPixel.blue !== expectedPixel.blue ||
+          actualPixel.alpha !== expectedPixel.alpha) {
           diff.push({
             at: [x, y],
             expected: expectedPixel,

@@ -1,5 +1,5 @@
-define(["flood-fill", "jquery", "paper"
-], function(FloodFill, $, paper) {
+define(["flood-fill", "jquery", "paper", "byte-color"
+], function(FloodFill, $, paper, ByteColor) {
 
   describe("FloodFill", function() {
 
@@ -33,12 +33,7 @@ define(["flood-fill", "jquery", "paper"
 
       it("fills the color", function() {
         expect(image).to.contain.pixels(function(x, y) {
-          return {
-            r: 0,
-            g: rect.contains(x, y) ? 200 : 0,
-            b: 0,
-            a: rect.contains(x, y) ? 1 : 255,
-          };
+          return new ByteColor( 0, rect.contains(x, y) ? 200 : 0, 0, rect.contains(x, y) ? 1 : 255);
         });
       });
 
@@ -47,11 +42,7 @@ define(["flood-fill", "jquery", "paper"
       });
 
       it("returns patch color", function() {
-        expect(floodFillResult.color()).to.eql({
-          r: 0,
-          g: 200,
-          b: 0
-        });
+        expect(floodFillResult.color()).to.equal(new ByteColor(0,200,0));
       });
 
       it("returns patch bounds", function() {
@@ -64,7 +55,7 @@ define(["flood-fill", "jquery", "paper"
       var changedRect = rect.intersect(replaceRect);
 
       beforeEach(function() {
-        // a lame ass way to fill it with particular value of alpha channel
+        // alpha lame ass way to fill it with particular value of alpha channel
         context.beginPath();
         context.rect(rect.x, rect.y, rect.width, rect.height);
         context.clip();
@@ -79,13 +70,9 @@ define(["flood-fill", "jquery", "paper"
       });
 
       it("replaces index within the ROI", function() {
-        var expected = {
-          r: 0,
-          g: 0,
-          b: 0
-        };
+        var expected = new ByteColor();
         expect(image).to.contain.pixels(function(x, y) {
-          expected.a = changedRect.contains(x, y) ? 7 : rect.contains(x, y) ? 42 : 255;
+          expected.alpha = changedRect.contains(x, y) ? 7 : rect.contains(x, y) ? 42 : 255;
           return expected;
         });
       });

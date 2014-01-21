@@ -34,12 +34,21 @@ define([
       this.red += delta.red;
       this.green += delta.green;
       this.blue += delta.blue;
+      return this;
     },
 
     attenuate: function(divisor) {
       this.red = Math.floor( this.red / divisor );
       this.green = Math.floor( this.green / divisor );
       this.blue = Math.floor( this.blue / divisor );
+      return this;
+    },
+
+    equals: function(other) {
+      return this.red === other.red &&
+             this.green === other.green &&
+             this.blue === other.blue &&
+             this.alpha === other.alpha;
     }
   });
 

@@ -48,45 +48,65 @@ define(["byte-color"], function(ByteColor) {
     });
 
     describe(".accumulate()", function() {
-      var accumulator, delta;
+      var color, delta;
       beforeEach(function() {
-        accumulator = new ByteColor(0, 0, 0);
+        color = new ByteColor(0, 0, 0);
         delta = new ByteColor(50, 150, 200);
       });
       it("accumulates rgb values", function() {
-        accumulator.accumulate(delta);
-        expect(accumulator.red).to.eq(delta.red);
-        expect(accumulator.green).to.eq(delta.green);
-        expect(accumulator.blue).to.eq(delta.blue);
-        accumulator.accumulate(delta);
-        expect(accumulator.red).to.eq(delta.red * 2);
-        expect(accumulator.green).to.eq(delta.green * 2);
-        expect(accumulator.blue).to.eq(delta.blue * 2);
+        color.accumulate(delta);
+        expect(color.red).to.eq(delta.red);
+        expect(color.green).to.eq(delta.green);
+        expect(color.blue).to.eq(delta.blue);
+        color.accumulate(delta);
+        expect(color.red).to.eq(delta.red * 2);
+        expect(color.green).to.eq(delta.green * 2);
+        expect(color.blue).to.eq(delta.blue * 2);
       });
       it("leaves alpha value alone", function() {
-        var initialAlpha = accumulator.alpha;
-        accumulator.accumulate(delta);
-        expect(accumulator.alpha).to.eq(initialAlpha);
-        accumulator.accumulate(delta);
-        expect(accumulator.alpha).to.eq(initialAlpha);
+        var initialAlpha = color.alpha;
+        color.accumulate(delta);
+        expect(color.alpha).to.eq(initialAlpha);
+        color.accumulate(delta);
+        expect(color.alpha).to.eq(initialAlpha);
+      });
+      it("returns color", function(){
+        expect(color.accumulate(delta)).to.eq(color);
       });
     });
+
     describe(".attenuate()", function() {
-      var initialColor, accumulator, divisor = 5;
+      var initialColor, color, divisor = 5;
       beforeEach(function() {
         initialColor = new ByteColor(35, 21, 10);
-        accumulator = new ByteColor(initialColor);
+        color = new ByteColor(initialColor);
       });
       it("divides rgb values by argument then floors", function() {
-        accumulator.attenuate(divisor);
-        expect(accumulator.red).to.eq(Math.floor(initialColor.red / divisor));
-        expect(accumulator.green).to.eq(Math.floor(initialColor.green / divisor));
-        expect(accumulator.blue).to.eq(Math.floor(initialColor.blue / divisor));
+        color.attenuate(divisor);
+        expect(color.red).to.eq(Math.floor(initialColor.red / divisor));
+        expect(color.green).to.eq(Math.floor(initialColor.green / divisor));
+        expect(color.blue).to.eq(Math.floor(initialColor.blue / divisor));
       });
       it("leaves alpha value alone", function() {
-        var initialAlpha = accumulator.alpha;
-        accumulator.attenuate(divisor);
-        expect(accumulator.alpha).to.eq(initialAlpha);
+        var initialAlpha = color.alpha;
+        color.attenuate(divisor);
+        expect(color.alpha).to.eq(initialAlpha);
+      });
+      it("returns color", function(){
+        expect(color.attenuate(divisor)).to.eq(color);
+      });
+    });
+
+    describe(".equals()", function() {
+      var color = new ByteColor(10, 20, 30, 127);
+      var sameColor = new ByteColor(color);
+      var otherColor = new ByteColor(30, 20, 10);
+
+      it("is truthy for same colors", function() {
+        expect( color.equals(sameColor) ).to.be.true;
+      });
+      it("is falsy for different colors", function() {
+        expect( color.equals(otherColor) ).to.be.false;
       });
     });
   });

@@ -1,22 +1,18 @@
 define([
-    "paper", "jquery", "color-patch"
-], function(paper, $, ColorPatch) {
+    "paper", "jquery", "color-patch", "byte-color"
+], function(paper, $, ColorPatch, ByteColor) {
 
   var FloodFillMixin = {
     color: function(x, y) {
       var offset = (x + this.width * y) * 4;
       var rgba = this.data;
-      return {
-        r: rgba[offset],
-        g: rgba[offset + 1],
-        b: rgba[offset + 2],
-        a: rgba[offset + 3],
-      };
+      return new ByteColor(rgba[offset], rgba[offset + 1],
+        rgba[offset + 2], rgba[offset + 3]);
     },
 
     setColor: function(x, y, obj) {
       if (!(obj instanceof Array)) {
-        obj = [obj.r, obj.g, obj.b, obj.a];
+        obj = [obj.red, obj.green, obj.blue, obj.alpha];
       }
       var offset = (x + this.width * y) * 4;
       var rgba = this.data;
@@ -35,11 +31,7 @@ define([
       var targetColor = this.color(x, y);
       var self = this;
 
-      var acc = {
-        r: 0,
-        g: 0,
-        b: 0
-      };
+      var acc = new ByteColor();
       var area = 0;
       var bounds;
 
@@ -55,10 +47,10 @@ define([
 
       function floodFillTest(x, y) {
         var pixelColor = self.color(x, y);
-        return pixelColor.a == 255 &&
-          (Math.abs(pixelColor.r - targetColor.r) <= tolerance) &&
-          (Math.abs(pixelColor.g - targetColor.g) <= tolerance) &&
-          (Math.abs(pixelColor.b - targetColor.b) <= tolerance);
+        return pixelColor.alpha == 255 &&
+          (Math.abs(pixelColor.red - targetColor.red) <= tolerance) &&
+          (Math.abs(pixelColor.green - targetColor.green) <= tolerance) &&
+          (Math.abs(pixelColor.blue - targetColor.blue) <= tolerance);
       };
 
       var queue = [[x, y]];
@@ -79,10 +71,8 @@ define([
           for (var x = xWest; x <= xEast; x++) {
             var pixel = this.color(x,y);
             area++;
-            acc.r += pixel.r;
-            acc.g += pixel.g;
-            acc.b += pixel.b;
-            this.setColor(x, y, {a: markValue});
+            acc.accumulate(pixel);
+            this.setColor(x, y, {alpha: markValue});
 
             if (y > 0 && floodFillTest(x, y - 1)) {
               queue.push([x, y - 1]);
@@ -95,11 +85,7 @@ define([
       }
       return new ColorPatch({
         area: area,
-        color: {
-          r: Math.floor(acc.r / area),
-          g: Math.floor(acc.g / area),
-          b: Math.floor(acc.b / area),
-        },
+        color: acc.attenuate(area),
         bounds: bounds
       });
     },
