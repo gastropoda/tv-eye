@@ -7,17 +7,30 @@
 
   <body>
     <div id="scratch">
-      <ul class="patches-stats">
-        <li><b>patches count:</b> <span data-bind="text: patchCount" />
-        </li>
-        <li><b>min size:</b> <span data-bind="text: minPatchSize" />
-        </li>
-        <li><b>max size:</b> <span data-bind="text: maxPatchSize" />
-        </li>
-      </ul>
+
+      <div class="patches-stats">
+        <ul>
+          <li><b>patches count:</b> <span data-bind="text: patchCount" />
+          </li>
+          <li><b>min size:</b> <span data-bind="text: minPatchSize" />
+          </li>
+          <li><b>max size:</b> <span data-bind="text: maxPatchSize" />
+          </li>
+        </ul>
+
+        <ul class="spectrum" data-bind="foreach: shades">
+          <li>
+            <ul class="shade" data-bind="foreach: colors">
+              <li data-bind="text: $data, style: {background: $data}"></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+
       <ul class="patches" data-bind="foreach: patches">
         <li class="patch-info" data-bind="css: {selected: selected}">Patch
-            <a href="#" data-bind="click: $parent.removePatch">delete</a>
+             <a href="#" data-bind="click: $parent.removePatch">delete</a>
 
           <ul>
             <li><b>area:</b> <span data-bind="text: area" />
@@ -27,7 +40,8 @@
             <li><b>size:</b> <span data-bind="text: bounds().size" />
             </li>
         </li>
-        </ul>
+      </ul>
+
     </div>
   </body>
   <script data-main="js/main" src="js/lib/require.js"></script>

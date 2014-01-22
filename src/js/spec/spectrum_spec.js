@@ -28,7 +28,7 @@ define([
 
     describe("constructor", function() {
       it("assigns shades", function() {
-        expect(spectrum.shades).to.eql(shades);
+        expect(spectrum.shades()).to.eql(shades);
       });
 
       it("assigns discrimination tolerance", function() {

@@ -3,7 +3,15 @@ define([
 ], function(paper, $, ColorPatch, ByteColor) {
 
   var FloodFillMixin = {
-    color: function(x, y) {
+    color: function() {
+      var x = arguments[0];
+      var y = arguments[1];
+      if (arguments.length === 1) {
+        var point = arguments[0];
+        x = point.x;
+        y = point.y;
+      }
+
       var offset = (x + this.width * y) * 4;
       var rgba = this.data;
       return new ByteColor(rgba[offset], rgba[offset + 1],

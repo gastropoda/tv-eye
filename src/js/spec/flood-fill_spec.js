@@ -19,6 +19,20 @@ define(["flood-fill", "jquery", "paper", "byte-color"
       context.fillRect(rect.x, rect.y, rect.width, rect.height);
     });
 
+    describe(".color()", function() {
+      beforeEach(function() {
+        image = context.getImageData(0, 0, resolution.width, resolution.height);
+        FloodFill.extend(image);
+      });
+
+      it("returns the color given x,y", function() {
+        expect(image.color(rect.x, rect.y)).to.equal(new ByteColor(0,200,0));
+      });
+      it("returns the color given point", function() {
+        expect(image.color(rect.point)).to.equal(new ByteColor(0,200,0));
+      });
+    });
+
     describe(".floodFill()", function() {
       var floodFillResult;
       var startPoint = new paper.Point(3,4);

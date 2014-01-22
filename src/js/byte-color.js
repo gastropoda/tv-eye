@@ -54,6 +54,15 @@ define([
         this.alpha === other.alpha;
     },
 
+    distance: function(other) {
+      other = new ByteColor(other);
+      var self = this;
+      var ds = ["red","green","blue"].map(function(comp) {
+        return Math.abs(self[comp] - other[comp]);
+      });
+      return Math.max.apply(0, ds);
+    },
+
     within: function(tolerance, other) {
       return Math.abs(this.red - other.red) <= tolerance &&
         Math.abs(this.green - other.green) <= tolerance &&
@@ -65,7 +74,7 @@ define([
     },
 
     toString: function() {
-      return this.toPaperColor().toCSS(true);
+      return this.toPaperColor().toCSS(false);
     },
 
     toCSS: function(hex) {

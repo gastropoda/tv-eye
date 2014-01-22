@@ -1,9 +1,9 @@
 define([
-  "jquery"
-], function($) {
+  "jquery", "knockout"
+], function($, ko) {
   function Spectrum(options) {
     options = options || {};
-    this.shades = options.shades;
+    this.shades = ko.observableArray( options.shades || [] );
     this.discriminationTolerance = options.discriminationTolerance;
     this.calibrationTolerance = options.calibrationTolerance;
   }
@@ -14,7 +14,7 @@ define([
       var minDistance = calibrate ? this.calibrationTolerance : this.discriminationTolerance;
       var closestShade = null;
 
-      $.each(this.shades, function(i, shade) {
+      $.each(this.shades(), function(i, shade) {
         var distance = shade.distance(color);
         if (distance <= minDistance) {
           minDistance = distance;

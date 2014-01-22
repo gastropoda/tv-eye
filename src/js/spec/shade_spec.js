@@ -2,21 +2,19 @@ define([
   "shade"
 ], function(Shade) {
   describe("Shade", function() {
-    var colors, mergeThreshold, shade, inputColor;
+    var colors, shade, inputColor;
 
     beforeEach(function() {
-      mergeThreshold = 10;
       colors = [{}, {}, {}];
-      shade = new Shade({colors: colors, mergeThreshold: mergeThreshold});
+      shade = new Shade({
+        colors: colors,
+      });
       inputColor = {};
     });
 
     describe("constructor", function() {
       it("assigns colors", function() {
-        expect(shade.colors).to.eql(colors);
-      });
-      it("assigns mergeThreshold", function() {
-        expect(shade.mergeThreshold).to.eql(mergeThreshold);
+        expect(shade.colors()).to.eql(colors);
       });
     });
 
@@ -33,6 +31,18 @@ define([
 
       it("empty shade returns Infinity", function() {
         expect(new Shade().distance(inputColor)).to.eq(Infinity);
+      });
+    });
+
+    describe(".calibrate()", function() {
+      it("adds a color to the shade", function() {
+        var shade = new Shade();
+        expect(shade.colors()).to.be.empty;
+        shade.calibrate(colors[0]);
+        expect(shade.colors()).to.include(colors[0]);
+        shade.calibrate(colors[1]);
+        expect(shade.colors()).to.include(colors[0]);
+        expect(shade.colors()).to.include(colors[1]);
       });
     });
 

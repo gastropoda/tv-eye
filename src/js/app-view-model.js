@@ -1,10 +1,10 @@
 define([
     /* captured by function args */
-    "jquery", "knockout", "paper", "flood-fill", "color-patch",
-    "patch-list", "color-patches-layer"
+    "jquery", "knockout", "paper", "flood-fill", "color-patch", "patch-list", "color-patches-layer",
+    "shade", "spectrum", "byte-color"
     /* not captured */
-], function($, ko, paper, FloodFill, ColorPatch,
-  PatchList, ColorPatchesLayer) {
+], function($, ko, paper, FloodFill, ColorPatch, PatchList, ColorPatchesLayer, Shade, Spectrum,
+  ByteColor) {
 
   var NO_PATCH = 255;
   var PICK_TOLERANCE = 30;
@@ -24,10 +24,16 @@ define([
     };
     raster.onClick = function(event) {
       var point = event.point;
-      var patchIndex = patchIndexAt(point);
+      var pixel = imageData.color(point);
+      var patchIndex = pixel.alpha;
       if (patchIndex == NO_PATCH) {
-        var patch = self.findPatch(point);
-        patchList.put(patch);
+        if (spectrum.classifyColor(pixel, true)) {
+          var patch = self.findPatch(point);
+          patchList.put(patch);
+        }
+        else {
+          console.log("pixel rejected");
+        }
       }
       else {
         patchList.get(patchIndex).toggleSelected();
@@ -46,10 +52,6 @@ define([
       return self.patches().maxSize();
     });
 
-    function patchIndexAt(point) {
-      var rgba = imageData.data;
-      return rgba[(point.x + point.y * imageData.width) * 4 + 3];
-    }
     self.findPatch = function(point) {
       return imageData.floodFill(point, PICK_TOLERANCE, patchList.nextIndex());
     };
@@ -59,6 +61,23 @@ define([
     };
 
     ColorPatchesLayer.setup(self.patches);
+
+    this.shades = [
+      new Shade({
+        colors: [new ByteColor(60, 142, 52)]
+      }),
+      new Shade({
+        colors: [new ByteColor(215, 56, 128)]
+      }),
+      new Shade({
+        colors: [new ByteColor(192, 163, 33)]
+      })
+    ];
+    var spectrum = new Spectrum({
+      shades: this.shades,
+      discriminationTolerance: 30,
+      calibrationTolerance: 100
+    });
   }
   return AppViewModel;
 });

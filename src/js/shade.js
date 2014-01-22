@@ -1,17 +1,22 @@
-define(["jquery"],function($) {
+define([
+  "jquery", "knockout"
+],function($, ko) {
   function Shade(options) {
     options = options || {};
-    this.colors = options.colors || [];
-    this.mergeThreshold = options.mergeThreshold || 0;
+    this.colors = ko.observableArray( options.colors || [] );
   }
 
   $.extend(Shade.prototype, {
 
     distance: function(inputColor) {
-      var distances = this.colors.map(function(color) {
+      var distances = this.colors().map(function(color) {
         return color.distance(inputColor);
       });
       return Math.min.apply(0, distances);
+    },
+
+    calibrate: function(color) {
+      this.colors.push(color);
     }
 
   });

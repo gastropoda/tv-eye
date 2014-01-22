@@ -112,6 +112,17 @@ define(["byte-color"], function(ByteColor) {
       });
     });
 
+    describe(".distance()", function() {
+      var color = new ByteColor(10, 20, 30);
+      it("is the largest absolute difference of rgb components", function() {
+        expect(color.distance(color)).to.eq(0);
+        expect(color.distance(color.accumulate({red:1}))).to.eq(1);
+        expect(color.distance(color.accumulate({red:-2}))).to.eq(2);
+        expect(color.distance(color.accumulate({red:3,green:1}))).to.eq(3);
+        expect(color.distance(color.accumulate({red:-4,blue:1}))).to.eq(4);
+      });
+    });
+
     describe(".within()", function() {
       var tolerance = 10;
       var color = new ByteColor(127, 20, 30);
@@ -155,7 +166,7 @@ define(["byte-color"], function(ByteColor) {
       sinon.stub(color,"toPaperColor").returns(colorSpy);
       it("delegates .toString() to paper color's toCSS(true)", function() {
         color.toString();
-        expect(colorSpy.toCSS).to.have.been.calledWith(true);
+        expect(colorSpy.toCSS).to.have.been.calledWith(false);
       });
       it("delegates .toCSS() to paper color", function() {
         color.toCSS("hex");
