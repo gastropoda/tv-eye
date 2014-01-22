@@ -11,6 +11,8 @@ define([
         x = point.x;
         y = point.y;
       }
+      x = Math.round(x);
+      y = Math.round(y);
 
       var offset = (x + this.width * y) * 4;
       var rgba = this.data;
@@ -32,8 +34,8 @@ define([
     },
 
     floodFill: function(point, tolerance, markValue) {
-      var x = point.x;
-      var y = point.y;
+      var x = Math.round(point.x);
+      var y = Math.round(point.y);
       var width = this.width;
       var height = this.height;
       var targetColor = this.color(x, y);

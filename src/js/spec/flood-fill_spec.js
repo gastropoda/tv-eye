@@ -31,11 +31,20 @@ define(["flood-fill", "jquery", "paper", "byte-color"
       it("returns the color given point", function() {
         expect(image.color(rect.point)).to.equal(new ByteColor(0,200,0));
       });
+      it("recovers from fractional x,y", function() {
+        expect(image.color(rect.x+0.4, rect.y+0.4)).to.equal(new ByteColor(0,200,0));
+      });
+      it("recovers from fractional point", function() {
+        var point = new paper.Point(rect.point);
+        point.x += 0.4;
+        point.y += 0.4;
+        expect(image.color(point)).to.equal(new ByteColor(0,200,0));
+      });
     });
 
     describe(".floodFill()", function() {
       var floodFillResult;
-      var startPoint = new paper.Point(3,4);
+      var startPoint = new paper.Point(3.3,4.4);
       var tolerance = 0;
       var paintIndex = 1;
 
