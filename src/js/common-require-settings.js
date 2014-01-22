@@ -1,8 +1,8 @@
 require.config({
   paths: {
-    jquery: "lib/jquery-2.0.3.min",
-    knockout: "lib/knockout-3.0.0",
-    paper: "lib/paper-full-0.9.15"
+    jquery: "../../bower_components/jquery/jquery",
+    paper: "../../bower_components/paper/dist/paper",
+    knockout: "../../bower_components/knockout.js/knockout.debug"
   },
 
   map: {

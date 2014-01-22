@@ -1,6 +1,6 @@
 module.exports = function(config) {
   config.set({
-    basePath: "src",
+    basePath: "",
     // requirejs must be included before sinon-chai
     // so it can require chai
     frameworks: ["mocha", "requirejs", "sinon-chai"],
@@ -9,12 +9,13 @@ module.exports = function(config) {
       // these files can't be anonymous AMD modules because
       // they are included with script tags, see
       // http://requirejs.org/docs/errors.html#mismatch
-      "js/spec/support/*.js",
-      "js/spec/specs.setup.js",
-      { pattern: "js/**/*.js", included: false },
-      { pattern: "index.html", included: false, watched: false },
-      { pattern: "css/*.css", included: false, watched: false },
-      { pattern: "img/*.jpg", included: false, watched: false }
+      "src/js/spec/support/*.js",
+      "src/js/spec/specs.setup.js",
+      { pattern: "bower_components/**/*.js", included: false },
+      { pattern: "src/js/**/*.js", included: false },
+      { pattern: "src/index.html", included: false, watched: false },
+      { pattern: "src/css/*.css", included: false, watched: false },
+      { pattern: "src/img/*.jpg", included: false, watched: false }
     ],
     exclude: [],
     // must disable html2js preprocessor to serve plain html

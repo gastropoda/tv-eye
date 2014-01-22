@@ -1,7 +1,7 @@
-require(["/base/js/common-require-settings.js"], function() {
+require(["/base/src/js/common-require-settings.js"], function() {
 
   require.config({
-    baseUrl: "/base/js",
+    baseUrl: "/base/src/js",
     deps: collectSpecFiles(),
     callback: window.__karma__.start
   });
