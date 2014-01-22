@@ -1,15 +1,3 @@
-#scratch canvas {
-  display: block;
-}
-
-#scratch .patches {
-  float: right;
-}
-
-#scratch .patches-stats {
-  float: left;
-}
-
 .patch-info {
   color: #777;
 }

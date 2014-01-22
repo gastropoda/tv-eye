@@ -1,47 +1,96 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!--
+    <link href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    -->
     <link href="css/scratch.css" rel="stylesheet">
   </head>
 
   <body>
-    <div id="scratch">
+    <div class="container">
+      <h1>TV eye <small>human assisted color patch counter</small></h1>
 
-      <div class="patches-stats">
-        <ul>
-          <li><b>patches count:</b> <span data-bind="text: patchCount" />
-          </li>
-          <li><b>min size:</b> <span data-bind="text: minPatchSize" />
-          </li>
-          <li><b>max size:</b> <span data-bind="text: maxPatchSize" />
-          </li>
-        </ul>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="patches-stats panel panel-default">
+            <div class="panel-heading">Global stats</div>
+            <table class="table">
+              <tr>
+                <th>patches count:</th>
+                <td/>
+                <td data-bind="text: patchCount" />
+              </tr>
+              <tr>
+                <th>min size:</th>
+                <td data-bind="text: minPatchSize().width" />
+                <td data-bind="text: minPatchSize().height" />
+              </tr>
+              <tr>
+                <th>max size:</th>
+                <td data-bind="text: maxPatchSize().width" />
+                <td data-bind="text: maxPatchSize().height" />
+              </tr>
+            </table>
+          </div>
+          <div class="spectrum panel panel-default">
+            <div class="panel-heading">Spectrum</div>
+            <table class="table table-condensed">
+              <tbody data-bind="foreach: shades">
+                <tr>
+                  <td>
+                    <!-- ko foreach: colors -->
+                    <span class="badge" data-bind="style: {background: $data}">O</span>
 
-        <ul class="spectrum" data-bind="foreach: shades">
-          <li>
-            <ul class="shade" data-bind="foreach: colors">
-              <li data-bind="text: $data, style: {background: $data}"></li>
-            </ul>
-          </li>
-        </ul>
+                    <!-- /ko
+                    -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div id="scratch"></div>
+        </div>
+        <div class="col-md-3">
+          <div class="patches panel panel-default">
+            <div class="panel-heading">Color patches</div>
+            <table class="table">
+              <thead>
+              <tr>
+                <th>area</th>
+                <th>color</th>
+                <th>size</th>
+                <th />
+              </tr>
+            </thead>
+              <tbody>
+              <!-- ko foreach: patches -->
+              <tr data-bind="css: {selected: selected}">
+                <td data-bind="text: area"></td>
+                <td>
+                  <span class="badge" data-bind="style: { background: color }">O</span>
+                </td>
+                <td>
+                  <span data-bind="text: bounds().size.width"></span>x<span
+                    data-bind="text: bounds().size.height"></span>
+                </td>
+                <td>
+                  <a href="#"
+                     class="btn btn-danger btn-xs"
+                     data-bind="click: $parent.removePatch">x</a>
+                </td>
+              </tr>
+              <!-- /ko -->
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-
-
-      <ul class="patches" data-bind="foreach: patches">
-        <li class="patch-info" data-bind="css: {selected: selected}">Patch
-             <a href="#" data-bind="click: $parent.removePatch">delete</a>
-
-          <ul>
-            <li><b>area:</b> <span data-bind="text: area" />
-            </li>
-            <li><b>color:</b> <span data-bind="text: color, style: { background: color }" />
-            </li>
-            <li><b>size:</b> <span data-bind="text: bounds().size" />
-            </li>
-        </li>
-      </ul>
-
     </div>
   </body>
   <script data-main="js/main" src="../bower_components/requirejs/require.js"></script>

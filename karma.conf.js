@@ -12,6 +12,8 @@ module.exports = function(config) {
       "src/js/spec/support/*.js",
       "src/js/spec/specs.setup.js",
       { pattern: "bower_components/**/*.js", included: false },
+      { pattern: "bower_components/bootstrap/dist/**/*",
+        included: false, watched: false },
       { pattern: "src/js/**/*.js", included: false },
       { pattern: "src/index.html", included: false, watched: false },
       { pattern: "src/css/*.css", included: false, watched: false },
