@@ -18,7 +18,7 @@ define([
 
     calibrate: function(color) {
       this.colors.push(color);
-      if (this.maximumSize && this.colors().length > this.maximumSize)
+      while (this.maximumSize && this.colors().length > this.maximumSize)
         this.colors.remove( this.leastDistinctColor() );
     },
 

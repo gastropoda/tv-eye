@@ -64,13 +64,16 @@ define([
 
     this.shades = [
       new Shade({
-        colors: [new ByteColor(60, 142, 52)]
+        colors: [new ByteColor(60, 142, 52)],
+        maximumSize: 3
       }),
       new Shade({
-        colors: [new ByteColor(215, 56, 128)]
+        colors: [new ByteColor(215, 56, 128)],
+        maximumSize: 3
       }),
       new Shade({
-        colors: [new ByteColor(192, 163, 33)]
+        colors: [new ByteColor(192, 163, 33)],
+        maximumSize: 3
       })
     ];
     var spectrum = new Spectrum({

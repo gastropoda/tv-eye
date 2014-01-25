@@ -11,7 +11,7 @@ define([
     beforeEach(function() {
       colors = [{}, {}, {}];
       shade = new Shade({
-        colors: colors,
+        colors: colors.slice(),
         maximumSize: 3
       });
       inputColor = {};
@@ -102,10 +102,10 @@ define([
       describe(".calibrate() after the shade is full", function() {
         it("keeps only the most distinct colors", function() {
           shade.calibrate( inputColor );
-          expect(shade.colors()).to.include(inputColor);
-          expect(shade.colors()).to.include(colors[0]);
+          expect(shade.colors()).not.to.include(colors[0]);
           expect(shade.colors()).to.include(colors[1]);
           expect(shade.colors()).to.include(colors[2]);
+          expect(shade.colors()).to.include(inputColor);
         });
       });
 
