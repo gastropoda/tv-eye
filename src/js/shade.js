@@ -4,6 +4,7 @@ define([
   function Shade(options) {
     options = options || {};
     this.colors = ko.observableArray( options.colors || [] );
+    this.maximumSize = options.maximumSize || 5;
   }
 
   $.extend(Shade.prototype, {
@@ -17,6 +18,31 @@ define([
 
     calibrate: function(color) {
       this.colors.push(color);
+      if (this.maximumSize && this.colors().length > this.maximumSize)
+        this.colors.remove( this.leastDistinctColor() );
+    },
+
+    distinctness: function(color) {
+      var distinctness = 0;
+      var colors = this.colors();
+      for(var i in colors) {
+        distinctness += colors[i].distance(color);
+      }
+      return distinctness;
+    },
+
+    leastDistinctColor: function() {
+      var leastDistinct = null;
+      var minDistinction = Infinity;
+      var colors = this.colors();
+      for(var i in colors) {
+        var dist = this.distinctness(colors[i]);
+        if (dist < minDistinction) {
+          minDistinction = dist;
+          leastDistinct = colors[i];
+        }
+      }
+      return leastDistinct;
     }
 
   });
