@@ -1,0 +1,21 @@
+<div class="patches-stats panel panel-default">
+  <div class="panel-heading">Global stats</div>
+  <table class="table">
+    <tr>
+      <th>patches count:</th>
+      <td/>
+      <td data-bind="text: patchCount" />
+    </tr>
+    <tr>
+      <th>min size:</th>
+      <td data-bind="text: minPatchSize().width" />
+      <td data-bind="text: minPatchSize().height" />
+    </tr>
+    <tr>
+      <th>max size:</th>
+      <td data-bind="text: maxPatchSize().width" />
+      <td data-bind="text: maxPatchSize().height" />
+    </tr>
+  </table>
+</div>
+

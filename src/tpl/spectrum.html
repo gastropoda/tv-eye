@@ -1,0 +1,15 @@
+<div class="spectrum panel panel-default">
+  <div class="panel-heading">Spectrum</div>
+  <table class="table table-condensed">
+    <tbody data-bind="foreach: shades">
+      <tr>
+        <td>
+          <!-- ko foreach: colors -->
+          <span class="badge" data-bind="style: {background: $data}">O</span>
+          <!-- /ko -->
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+

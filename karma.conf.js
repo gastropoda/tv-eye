@@ -15,7 +15,7 @@ module.exports = function(config) {
       { pattern: "bower_components/bootstrap/dist/**/*",
         included: false, watched: false },
       { pattern: "src/js/**/*.js", included: false },
-      { pattern: "src/index.html", included: false, watched: false },
+      { pattern: "src/**/*.html", included: false, watched: false },
       { pattern: "src/css/*.css", included: false, watched: false },
       { pattern: "src/img/*.jpg", included: false, watched: false }
     ],

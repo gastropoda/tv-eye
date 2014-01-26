@@ -82,5 +82,6 @@ define([
       calibrationTolerance: 100
     });
   }
+
   return AppViewModel;
 });

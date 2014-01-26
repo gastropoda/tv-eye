@@ -8,6 +8,11 @@
     <link href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
     -->
     <link href="css/scratch.css" rel="stylesheet">
+
+    <!-- templates -->
+    <script type="text/html" id="patch-stats" data-load="template"></script>
+    <script type="text/html" id="spectrum" data-load="template"></script>
+    <script type="text/html" id="patches" data-load="template"></script>
   </head>
 
   <body>
@@ -16,79 +21,16 @@
 
       <div class="row">
         <div class="col-md-3">
-          <div class="patches-stats panel panel-default">
-            <div class="panel-heading">Global stats</div>
-            <table class="table">
-              <tr>
-                <th>patches count:</th>
-                <td/>
-                <td data-bind="text: patchCount" />
-              </tr>
-              <tr>
-                <th>min size:</th>
-                <td data-bind="text: minPatchSize().width" />
-                <td data-bind="text: minPatchSize().height" />
-              </tr>
-              <tr>
-                <th>max size:</th>
-                <td data-bind="text: maxPatchSize().width" />
-                <td data-bind="text: maxPatchSize().height" />
-              </tr>
-            </table>
-          </div>
-          <div class="spectrum panel panel-default">
-            <div class="panel-heading">Spectrum</div>
-            <table class="table table-condensed">
-              <tbody data-bind="foreach: shades">
-                <tr>
-                  <td>
-                    <!-- ko foreach: colors -->
-                    <span class="badge" data-bind="style: {background: $data}">O</span>
-
-                    <!-- /ko
-                    -->
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <div data-bind="template {name: 'patch-stats'}"></div>
+          <div data-bind="template {name: 'spectrum'}"></div>
         </div>
+
         <div class="col-md-6">
           <div id="scratch"></div>
         </div>
+
         <div class="col-md-3">
-          <div class="patches panel panel-default">
-            <div class="panel-heading">Color patches</div>
-            <table class="table">
-              <thead>
-              <tr>
-                <th>area</th>
-                <th>color</th>
-                <th>size</th>
-                <th />
-              </tr>
-            </thead>
-              <tbody>
-              <!-- ko foreach: patches -->
-              <tr>
-                <td data-bind="text: area"></td>
-                <td>
-                  <span class="badge" data-bind="style: { background: color }">O</span>
-                </td>
-                <td>
-                  <span data-bind="text: bounds().size.width"></span>x<span
-                    data-bind="text: bounds().size.height"></span>
-                </td>
-                <td>
-                  <a href="#"
-                     class="btn btn-danger btn-xs"
-                     data-bind="click: $parent.removePatch">x</a>
-                </td>
-              </tr>
-              <!-- /ko -->
-              </tbody>
-            </table>
-          </div>
+          <div data-bind="template {name: 'patches'}"></div>
         </div>
       </div>
     </div>
