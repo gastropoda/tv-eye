@@ -71,7 +71,8 @@ define([
 
     ColorPatchesLayer.setup(self.patches);
 
-    this.shades = [
+    self.manualTolerance = persist( "manualTolerance", ko.observable( 40 ) );
+    self.spectrum = new Spectrum({ shades: [
       new Shade({
         colors: [new ByteColor(60, 142, 52)],
         maximumSize: 3
@@ -84,9 +85,7 @@ define([
         colors: [new ByteColor(192, 163, 33)],
         maximumSize: 3
       })
-    ];
-    self.manualTolerance = persist( "manualTolerance", ko.observable( 40 ) );
-    self.spectrum = new Spectrum({ shades: this.shades });
+    ]});
 
 
     var MAX_LOG_MESSAGES = 10;
