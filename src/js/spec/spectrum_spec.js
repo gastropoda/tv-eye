@@ -44,17 +44,10 @@ define([
       function testRecognizer(distances, expectedResult, calibrate) {
         $.each(shades, function(i, shade) {
           shade.distance = sinon.stub().returns(distances[i]);
-          shade.calibrate = sinon.stub();
         });
         expect(spectrum.classifyColor(inputColor, calibrate)).to.eq(expectedResult);
         $.each(shades, function(i, shade) {
           expect(shade.distance).to.have.been.calledWith(inputColor);
-          if (calibrate && shade === expectedResult) {
-            expect(shade.calibrate).to.have.been.calledWith(inputColor);
-          }
-          else {
-            expect(shade.calibrate).not.to.have.been.called;
-          }
         });
       }
 

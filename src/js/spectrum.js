@@ -22,9 +22,6 @@ define([
         }
       });
 
-      if (calibrate && closestShade) {
-        closestShade.calibrate( color );
-      }
       return closestShade;
     }
   });

@@ -27,15 +27,7 @@ define([
       var pixel = imageData.color(point);
       var patchIndex = pixel.alpha;
       if (patchIndex == NO_PATCH) {
-        log("pixel: " + pixel);
-        self.spectrum.shades().forEach(function(shade) {
-          log("distance: " + shade.distance(pixel), shade.colors()[0]);
-        });
-
-        var shade = self.spectrum.classifyColor(pixel, true);
-        if (shade) {
-          log("Calibrated " + shade,
-              shade.colors()[0].toCSS());
+        if (self.spectrum.classifyColor(pixel, true)) {
           var patch = self.findPatch(point);
           patchList.put(patch);
         }
@@ -47,6 +39,15 @@ define([
         patchList.get(patchIndex).toggleSelected();
       }
     };
+    self.adjustSpectrum = function(_, event) {
+      self.patches().forEach(function(patch){
+        var shade;
+        if (shade = self.spectrum.classifyColor(patch.color(), true)) {
+          shade.calibrate(patch.color());
+          log("Calibrated " + shade, shade.colors()[0].toCSS());
+        }
+      });
+    }
 
     var patchList = new PatchList();
     self.patches = patchList.patches;
