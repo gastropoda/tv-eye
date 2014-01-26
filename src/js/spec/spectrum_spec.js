@@ -32,11 +32,11 @@ define([
       });
 
       it("assigns discrimination tolerance", function() {
-        expect(spectrum.discriminationTolerance).to.eql(discriminationTolerance);
+        expect(spectrum.discriminationTolerance()).to.eql(discriminationTolerance);
       });
 
       it("assigns calibration tolerance", function() {
-        expect(spectrum.calibrationTolerance).to.eql(calibrationTolerance);
+        expect(spectrum.calibrationTolerance()).to.eql(calibrationTolerance);
       });
     });
 

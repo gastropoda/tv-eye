@@ -14,6 +14,7 @@
     <script type="text/html" id="spectrum" data-load="template"></script>
     <script type="text/html" id="patches" data-load="template"></script>
     <script type="text/html" id="log" data-load="template"></script>
+    <script type="text/html" id="algo-config" data-load="template"></script>
   </head>
 
   <body>
@@ -28,6 +29,7 @@
         </div>
 
         <div class="col-md-6">
+          <div data-bind="template {name: 'algo-config'}"></div>
           <div id="scratch"></div>
         </div>
 

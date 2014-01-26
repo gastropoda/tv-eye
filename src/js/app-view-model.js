@@ -27,8 +27,13 @@ define([
       var pixel = imageData.color(point);
       var patchIndex = pixel.alpha;
       if (patchIndex == NO_PATCH) {
-        var shade;
-        if (shade = spectrum.classifyColor(pixel, true)) {
+        log("pixel: " + pixel);
+        spectrum.shades().forEach(function(shade) {
+          log("distance: " + shade.distance(pixel), shade.colors()[0]);
+        });
+
+        var shade = spectrum.classifyColor(pixel, true);
+        if (shade) {
           log("Calibrated " + shade,
               shade.colors()[0].toCSS());
           var patch = self.findPatch(point);
