@@ -13,5 +13,11 @@ require.config({
     "patch/paper": {
       paper: "paper"
     }
+  },
+
+  shim: {
+    bootstrap: {
+      deps: ["jquery"]
+    }
   }
 });
