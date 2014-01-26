@@ -27,7 +27,7 @@ define([
       var pixel = imageData.color(point);
       var patchIndex = pixel.alpha;
       if (patchIndex == NO_PATCH) {
-        if (self.spectrum.classifyColor(pixel, true)) {
+        if (self.spectrum.classifyColor(pixel, self.manualTolerance())) {
           var patch = self.findPatch(point);
           patchList.put(patch);
         }
@@ -42,7 +42,7 @@ define([
     self.adjustSpectrum = function(_, event) {
       self.patches().forEach(function(patch){
         var shade;
-        if (shade = self.spectrum.classifyColor(patch.color(), true)) {
+        if (shade = self.spectrum.classifyColor(patch.color(), self.manualTolerance())) {
           shade.calibrate(patch.color());
           log("Calibrated " + shade, shade.colors()[0].toCSS());
         }
@@ -85,12 +85,9 @@ define([
         maximumSize: 3
       })
     ];
+    self.manualTolerance = ko.observable( 40 );
+    self.spectrum = new Spectrum({ shades: this.shades });
 
-    self.spectrum = new Spectrum({
-      shades: this.shades,
-      discriminationTolerance: 20,
-      calibrationTolerance: 40
-    });
 
     var MAX_LOG_MESSAGES = 10;
     self.log = ko.observableArray();

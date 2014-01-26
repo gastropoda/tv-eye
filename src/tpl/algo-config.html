@@ -4,17 +4,17 @@
     <form class="form-horizontal" role="form">
       <div class="form-group"
            title="when to reject pixels against human command">
-        <label for="calibrationTolerance"
+        <label for="manualTolerance"
                class="control-label col-sm-5">
-               Calibration tolerance [<span data-bind="text: spectrum.calibrationTolerance"></span>]:
+               Manual tolerance [<span data-bind="text: manualTolerance"></span>]:
         </label>
         <div class="col-sm-7">
-          <input name="calibrationTolerance"
+          <input name="manualTolerance"
                  type="range"
                  min="0"
                  max="255"
                  class="form-control"
-                 data-bind="value: spectrum.calibrationTolerance"></input>
+                 data-bind="value: manualTolerance"></input>
         </div>
       </div>
       <a href="#" class="btn btn-primary" data-bind="click: adjustSpectrum">Adjust spectrum</a>
