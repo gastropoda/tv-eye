@@ -1,33 +1,35 @@
 <div class="patches panel panel-default">
   <div class="panel-heading">Color patches</div>
-  <table class="table">
-    <thead>
-    <tr>
-      <th>area</th>
-      <th>color</th>
-      <th>size</th>
-      <th />
-    </tr>
-  </thead>
-    <tbody>
-    <!-- ko foreach: patches -->
-    <tr>
-      <td data-bind="text: area"></td>
-      <td>
-        <span class="badge" data-bind="style: { background: color }">O</span>
-      </td>
-      <td>
-        <span data-bind="text: bounds().size.width"></span>x<span
-          data-bind="text: bounds().size.height"></span>
-      </td>
-      <td>
-        <a href="#"
-           class="btn btn-danger btn-xs"
-           data-bind="click: $parent.removePatch">x</a>
-      </td>
-    </tr>
-    <!-- /ko -->
-    </tbody>
-  </table>
+  <div class="panel-body">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>area</th>
+        <th>color</th>
+        <th>size</th>
+        <th />
+      </tr>
+    </thead>
+      <tbody>
+      <!-- ko foreach: patches -->
+      <tr>
+        <td data-bind="text: area"></td>
+        <td>
+          <span class="badge" data-bind="style: { background: color }">O</span>
+        </td>
+        <td>
+          <span data-bind="text: bounds().size.width"></span>x<span
+            data-bind="text: bounds().size.height"></span>
+        </td>
+        <td>
+          <a href="#"
+             class="btn btn-danger btn-xs"
+             data-bind="click: $parent.removePatch">x</a>
+        </td>
+      </tr>
+      <!-- /ko -->
+      </tbody>
+    </table>
+  </div>
 </div>
 

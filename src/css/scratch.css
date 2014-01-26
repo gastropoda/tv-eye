@@ -1,0 +1,9 @@
+.log .panel-body {
+  height: 130px;
+  overflow-y: scroll;
+}
+
+.patches .panel-body {
+  height: 400px;
+  overflow-y: scroll;
+}

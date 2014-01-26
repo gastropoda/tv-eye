@@ -27,12 +27,15 @@ define([
       var pixel = imageData.color(point);
       var patchIndex = pixel.alpha;
       if (patchIndex == NO_PATCH) {
-        if (spectrum.classifyColor(pixel, true)) {
+        var shade;
+        if (shade = spectrum.classifyColor(pixel, true)) {
+          log("Calibrated " + shade,
+              shade.colors()[0].toCSS());
           var patch = self.findPatch(point);
           patchList.put(patch);
         }
         else {
-          console.log("pixel rejected");
+          log("pixel rejected", "red");
         }
       }
       else {
@@ -81,6 +84,20 @@ define([
       discriminationTolerance: 30,
       calibrationTolerance: 100
     });
+
+    var MAX_LOG_MESSAGES = 10;
+    self.log = ko.observableArray();
+    function log(message, color) {
+      color = color || "black";
+      self.log.unshift({
+        message: message,
+        color: color
+      });
+      while (self.log().length > MAX_LOG_MESSAGES) {
+        self.log.pop();
+      }
+    }
+    log("FIXME extract template loader", "red");
   }
 
   return AppViewModel;

@@ -43,6 +43,10 @@ define([
         }
       }
       return leastDistinct;
+    },
+
+    toString: function() {
+      return "Shade";
     }
 
   });
