@@ -1,14 +1,23 @@
 <div class="algo-config panel panel-default">
   <div class="panel-heading">Algorithm configuration</div>
-
   <div class="panel-body">
-    <label title="when to reject pixels against human command">Calibration tolerance (0-255):
-      <input type="text"
-             data-bind="value: spectrum.calibrationTolerance">
-      </input>
-    </label>
-
+    <form class="form-horizontal" role="form">
+      <div class="form-group"
+           title="when to reject pixels against human command">
+        <label for="calibrationTolerance"
+               class="control-label col-sm-5">
+               Calibration tolerance [<span data-bind="text: spectrum.calibrationTolerance"></span>]:
+        </label>
+        <div class="col-sm-7">
+          <input name="calibrationTolerance"
+                 type="range"
+                 min="0"
+                 max="255"
+                 class="form-control"
+                 data-bind="value: spectrum.calibrationTolerance"></input>
+        </div>
+      </div>
+      <button class="btn btn-primary">Adjust spectrum</button>
+    </form>
   </div>
-
 </div>
-

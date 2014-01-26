@@ -18,9 +18,8 @@
   </head>
 
   <body>
+    <p class="vertical-space"></p>
     <div class="container">
-      <h1>TV eye <small>human assisted color patch counter</small></h1>
-
       <div class="row">
         <div class="col-md-3">
           <div data-bind="template {name: 'patch-stats'}"></div>
@@ -29,7 +28,7 @@
         </div>
 
         <div class="col-md-6">
-          <div data-bind="template {name: 'algo-config'}"></div>
+          <div data-bind="template {name: 'algo-config', data: $data}"></div>
           <div id="scratch"></div>
         </div>
 

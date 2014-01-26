@@ -28,11 +28,11 @@ define([
       var patchIndex = pixel.alpha;
       if (patchIndex == NO_PATCH) {
         log("pixel: " + pixel);
-        spectrum.shades().forEach(function(shade) {
+        self.spectrum.shades().forEach(function(shade) {
           log("distance: " + shade.distance(pixel), shade.colors()[0]);
         });
 
-        var shade = spectrum.classifyColor(pixel, true);
+        var shade = self.spectrum.classifyColor(pixel, true);
         if (shade) {
           log("Calibrated " + shade,
               shade.colors()[0].toCSS());
@@ -84,10 +84,11 @@ define([
         maximumSize: 3
       })
     ];
-    var spectrum = new Spectrum({
+
+    self.spectrum = new Spectrum({
       shades: this.shades,
-      discriminationTolerance: 30,
-      calibrationTolerance: 100
+      discriminationTolerance: 20,
+      calibrationTolerance: 40
     });
 
     var MAX_LOG_MESSAGES = 10;
