@@ -1,10 +1,10 @@
 define([
     /* captured by function args */
-    "jquery", "knockout", "paper", "flood-fill", "color-patch", "patch-list", "color-patches-layer",
-    "shade", "spectrum", "byte-color"
+    "jquery", "knockout", "paper", "flood-fill", "color-patch", "patch-list",
+    "color-patches-layer", "shade", "spectrum", "byte-color", "persist"
     /* not captured */
-], function($, ko, paper, FloodFill, ColorPatch, PatchList, ColorPatchesLayer, Shade, Spectrum,
-  ByteColor) {
+], function($, ko, paper, FloodFill, ColorPatch, PatchList,
+  ColorPatchesLayer, Shade, Spectrum, ByteColor, persist) {
 
   var NO_PATCH = 255;
   var PICK_TOLERANCE = 30;
@@ -85,7 +85,7 @@ define([
         maximumSize: 3
       })
     ];
-    self.manualTolerance = ko.observable( 40 );
+    self.manualTolerance = persist( "manualTolerance", ko.observable( 40 ) );
     self.spectrum = new Spectrum({ shades: this.shades });
 
 
