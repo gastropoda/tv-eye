@@ -1,106 +1,63 @@
 define([
     /* captured by function args */
-    "jquery", "knockout", "paper", "flood-fill", "color-patch", "patch-list",
-    "color-patches-layer", "shade", "spectrum", "byte-color", "persist"
+    "jquery", "knockout", "color-patch", "patch-list", "color-patches-layer", "shade",
+    "spectrum", "byte-color", "persist", "interactive-image"
     /* not captured */
-], function($, ko, paper, FloodFill, ColorPatch, PatchList,
-  ColorPatchesLayer, Shade, Spectrum, ByteColor, persist) {
-
-  var NO_PATCH = 255;
-  var PICK_TOLERANCE = 30;
+], function($, ko, ColorPatch, PatchList, ColorPatchesLayer, Shade, Spectrum,
+  ByteColor, persist, InteractiveImage) {
 
   function AppViewModel() {
+    this.NO_PATCH = 255;
+    this.floodFillTolerance = 30;
+    this.manualTolerance = persist("manualTolerance", ko.observable(40));
+    this.spectrum = new Spectrum({ shades: [ makeShade(60, 142, 52),
+                                             makeShade(215, 56, 128),
+                                             makeShade(192, 163, 33)]});
+    this.patchList = new PatchList();
+    this.patches = this.patchList.patches;
+    this.patchCount = ko.computed(function() { return this.patches().length; }, this);
+    this.minPatchSize = ko.computed(function() { return this.patches().minSize(); }, this);
+    this.maxPatchSize = ko.computed(function() { return this.patches().maxSize(); }, this);
+    this.maxLogMessages = 10;
+    this.messages = ko.observableArray();
+    InteractiveImage.setup("img/groningen-test.jpg",this);
+    ColorPatchesLayer.setup(this.patches);
+    this.log("FIXME extract template loader", "red");
+
+    function makeShade(r,g,b) {
+      return new Shade({ colors: [new ByteColor(r,g,b)], maximumSize: 3});
+    }
+  }
+
+  AppViewModel.prototype.adjustSpectrum = function(_, event) {
     var self = this;
-
-    paper.setup($("<canvas/>").appendTo("#scratch").get(0));
-
-    var imageData;
-    var raster = new paper.Raster("img/groningen-test.jpg");
-    raster.onLoad = function() {
-      paper.view.setViewSize(this.size);
-      this.setPosition(this.size.divide(2));
-      imageData = raster.getImageData();
-      FloodFill.extend(imageData);
-    };
-    raster.onClick = function(event) {
-      var point = event.point;
-      var pixel = imageData.color(point);
-      var patchIndex = pixel.alpha;
-      if (patchIndex == NO_PATCH) {
-        if (self.spectrum.classifyColor(pixel, self.manualTolerance())) {
-          var patch = self.findPatch(point);
-          patchList.put(patch);
-        }
-        else {
-          log("pixel rejected", "red");
-        }
+    this.patches().forEach(function(patch){
+      var shade;
+      if (shade = self.spectrum.classifyColor(patch.color(), self.manualTolerance())) {
+        shade.calibrate(patch.color());
+        self.log("Calibrated " + shade, shade.colors()[0].toCSS());
       }
-      else {
-        patchList.get(patchIndex).toggleSelected();
-      }
-    };
-    self.adjustSpectrum = function(_, event) {
-      self.patches().forEach(function(patch){
-        var shade;
-        if (shade = self.spectrum.classifyColor(patch.color(), self.manualTolerance())) {
-          shade.calibrate(patch.color());
-          log("Calibrated " + shade, shade.colors()[0].toCSS());
-        }
-      });
+    });
+  }
+
+  AppViewModel.prototype.findPatch = function(point) {
+    return this.imageData.floodFill(point, this.floodFillTolerance, this.patchList.nextIndex());
+  };
+
+  AppViewModel.prototype.removePatch = function(patch) {
+    var index = this.patchList.remove(patch);
+    this.imageData.replaceIndex(index, this.NO_PATCH, patch.bounds());
+  };
+
+  AppViewModel.prototype.log = function(message, color) {
+    color = color || "black";
+    this.messages.unshift({
+      message: message,
+      color: color
+    });
+    while (this.messages().length > this.maxLogMessages) {
+      this.messages.pop();
     }
-
-    var patchList = new PatchList();
-    self.patches = patchList.patches;
-    self.patchCount = ko.computed(function() {
-      return self.patches().length;
-    });
-    self.minPatchSize = ko.computed(function() {
-      return self.patches().minSize();
-    });
-    self.maxPatchSize = ko.computed(function() {
-      return self.patches().maxSize();
-    });
-
-    self.findPatch = function(point) {
-      return imageData.floodFill(point, PICK_TOLERANCE, patchList.nextIndex());
-    };
-    self.removePatch = function(patch) {
-      var index = patchList.remove(patch);
-      imageData.replaceIndex(index, NO_PATCH, patch.bounds());
-    };
-
-    ColorPatchesLayer.setup(self.patches);
-
-    self.manualTolerance = persist( "manualTolerance", ko.observable( 40 ) );
-    self.spectrum = new Spectrum({ shades: [
-      new Shade({
-        colors: [new ByteColor(60, 142, 52)],
-        maximumSize: 3
-      }),
-      new Shade({
-        colors: [new ByteColor(215, 56, 128)],
-        maximumSize: 3
-      }),
-      new Shade({
-        colors: [new ByteColor(192, 163, 33)],
-        maximumSize: 3
-      })
-    ]});
-
-
-    var MAX_LOG_MESSAGES = 10;
-    self.log = ko.observableArray();
-    function log(message, color) {
-      color = color || "black";
-      self.log.unshift({
-        message: message,
-        color: color
-      });
-      while (self.log().length > MAX_LOG_MESSAGES) {
-        self.log.pop();
-      }
-    }
-    log("FIXME extract template loader", "red");
   }
 
   return AppViewModel;
