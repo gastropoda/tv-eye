@@ -85,5 +85,25 @@ define([
     }
   }
 
+  AppViewModel.prototype.classifyColor = function(point, color) {
+    var shade;
+    if (shade = this.spectrum.classifyColor(color, this.manualTolerance())) {
+      var patch = this.findPatch(point);
+      this.patchList.put(patch);
+    } else {
+      this.log("color rejected", "red");
+    }
+  }
+
+  AppViewModel.prototype.pickPixel = function(point) {
+    var pixel = this.imageData.color(point);
+    var patchIndex = pixel.alpha;
+    if (patchIndex == this.NO_PATCH) {
+      this.classifyColor(point, pixel);
+    } else {
+      this.patchList.get(patchIndex).toggleSelected();
+    }
+  }
+
   return AppViewModel;
 });
