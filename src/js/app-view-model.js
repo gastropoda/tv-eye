@@ -9,10 +9,7 @@ define([
   function AppViewModel() {
     this.NO_PATCH = 255;
     this.floodFillTolerance = 30;
-    this.manualTolerance = persist("manualTolerance", ko.observable(40));
-    this.spectrum = new Spectrum({ shades: [ makeShade(60, 142, 52),
-                                             makeShade(215, 56, 128),
-                                             makeShade(192, 163, 33)]});
+    this.manualTolerance = persist("scratch.manualTolerance", ko.observable(40));
     this.patchList = new PatchList();
     this.patches = this.patchList.patches;
     this.patchCount = ko.computed(function() { return this.patches().length; }, this);
@@ -20,12 +17,39 @@ define([
     this.maxPatchSize = ko.computed(function() { return this.patches().maxSize(); }, this);
     this.maxLogMessages = 10;
     this.messages = ko.observableArray();
+
+    this.load( function () {
+      this.spectrum = new Spectrum({ shades: [
+        makeShade(60, 142, 52),
+        makeShade(215, 56, 128),
+        makeShade(192, 163, 33)]});
+    });
+
     InteractiveImage.setup("img/groningen-test.jpg",this);
     ColorPatchesLayer.setup(this.patches);
     this.log("FIXME extract template loader", "red");
 
     function makeShade(r,g,b) {
       return new Shade({ colors: [new ByteColor(r,g,b)], maximumSize: 3});
+    }
+  }
+
+  AppViewModel.prototype.save = function() {
+    localStorage["scratch.spectrum"] = ko.toJSON( this.spectrum );
+  }
+
+  AppViewModel.prototype.load = function( initialize ) {
+    try {
+      var json = JSON.parse( localStorage["scratch.spectrum"] );
+      var shades = json.shades.map(function(shadeOpts) {
+        for(var i in shadeOpts.colors) {
+          shadeOpts.colors[i] = new ByteColor( shadeOpts.colors[i] );
+        }
+        return new Shade(shadeOpts);
+      });
+      this.spectrum = new Spectrum({shades: shades});
+    } catch (e) {
+      initialize.apply(this);
     }
   }
 
@@ -38,6 +62,7 @@ define([
         self.log("Calibrated " + shade, shade.colors()[0].toCSS());
       }
     });
+    this.save();
   }
 
   AppViewModel.prototype.findPatch = function(point) {
