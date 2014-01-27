@@ -17,13 +17,13 @@ define([
     this.maxPatchSize = ko.computed(function() { return this.patches().maxSize(); }, this);
     this.maxLogMessages = 10;
     this.messages = ko.observableArray();
-
     this.load( function () {
       this.spectrum = new Spectrum({ shades: [
         makeShade(60, 142, 52),
         makeShade(215, 56, 128),
         makeShade(192, 163, 33)]});
     });
+    this.counts = ko.computed(AppViewModel.prototype.counts, this);
 
     InteractiveImage.setup("img/groningen-test.jpg",this);
     ColorPatchesLayer.setup(this.patches);
@@ -32,6 +32,20 @@ define([
     function makeShade(r,g,b) {
       return new Shade({ colors: [new ByteColor(r,g,b)], maximumSize: 3});
     }
+  }
+
+  AppViewModel.prototype.counts = function() {
+    var counts = {};
+    this.patches().forEach(function(patch){
+      var shade = patch.shade;
+      counts[shade] = (counts[shade]||0) + 1;
+    });
+    return this.spectrum.shades().map( function(shade) {
+      return {
+        count: counts[shade] || 0,
+        shade: shade
+      };
+    });
   }
 
   AppViewModel.prototype.save = function() {
@@ -54,13 +68,8 @@ define([
   }
 
   AppViewModel.prototype.adjustSpectrum = function(_, event) {
-    var self = this;
     this.patches().forEach(function(patch){
-      var shade;
-      if (shade = self.spectrum.classifyColor(patch.color(), self.manualTolerance())) {
-        shade.calibrate(patch.color());
-        self.log("Calibrated " + shade, shade.colors()[0].toCSS());
-      }
+      patch.shade.calibrate(patch.color());
     });
     this.save();
   }
@@ -89,6 +98,7 @@ define([
     var shade;
     if (shade = this.spectrum.classifyColor(color, this.manualTolerance())) {
       var patch = this.findPatch(point);
+      patch.shade = shade;
       this.patchList.put(patch);
     } else {
       this.log("color rejected", "red");

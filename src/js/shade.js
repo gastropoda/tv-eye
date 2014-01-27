@@ -1,6 +1,6 @@
 define([
-  "jquery", "knockout"
-],function($, ko) {
+  "jquery", "knockout", "byte-color"
+],function($, ko, ByteColor) {
   function Shade(options) {
     options = options || {};
     this.colors = ko.observableArray( options.colors || [] );
@@ -46,7 +46,11 @@ define([
     },
 
     toString: function() {
-      return "Shade";
+      return "Shade[" + this.color().toCSS() + "]";
+    },
+
+    color: function() {
+      return this.colors()[0] || new ByteColor();
     }
 
   });

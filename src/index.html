@@ -10,6 +10,7 @@
     <link href="css/scratch.css" rel="stylesheet">
 
     <!-- templates -->
+    <script type="text/html" id="counts" data-load="template"></script>
     <script type="text/html" id="patch-stats" data-load="template"></script>
     <script type="text/html" id="spectrum" data-load="template"></script>
     <script type="text/html" id="patches" data-load="template"></script>
@@ -22,6 +23,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3">
+          <div data-bind="template {name: 'counts'}"></div>
           <div data-bind="template {name: 'patch-stats'}"></div>
           <div data-bind="template {name: 'spectrum', data: spectrum}"></div>
           <div data-bind="template {name: 'log'}"></div>
