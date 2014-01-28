@@ -10,6 +10,11 @@ define([
     this.NO_PATCH = 255;
     this.floodFillTolerance = 30;
     this.manualTolerance = persist("scratch.manualTolerance", ko.observable(40));
+    this.manualTolerance = persist("scratch.autoTolerance", ko.observable(30));
+    this.gridStep = ko.observable( new paper.Size(12,20) );
+    this.gridOffset = ko.computed( function() {
+      return this.gridStep().divide(2);
+    }, this);
     this.patchList = new PatchList();
     this.patches = this.patchList.patches;
     this.patchCount = ko.computed(function() { return this.patches().length; }, this);
@@ -100,8 +105,6 @@ define([
       var patch = this.findPatch(point);
       patch.shade = shade;
       this.patchList.put(patch);
-    } else {
-      this.log("color rejected", "red");
     }
   }
 
@@ -112,6 +115,23 @@ define([
       this.classifyColor(point, pixel);
     } else {
       this.patchList.get(patchIndex).toggleSelected();
+    }
+  }
+
+  AppViewModel.prototype.autoPickPixel = function(point) {
+    var pixel = this.imageData.color(point);
+    var patchIndex = pixel.alpha;
+    if (patchIndex == this.NO_PATCH) {
+      this.classifyColor(point, pixel);
+    }
+  }
+
+  AppViewModel.prototype.countPatches = function() {
+    var p = new paper.Point;
+    for(p.y = this.gridOffset().height; p.y < this.imageData.height; p.y += this.gridStep().height) {
+      for(p.x = this.gridOffset().width; p.x < this.imageData.width; p.x += this.gridStep().width) {
+        this.autoPickPixel(p);
+      }
     }
   }
 
