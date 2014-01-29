@@ -1,9 +1,9 @@
 define([
     /* captured by function args */
-    "jquery", "knockout", "color-patch", "patch-list", "color-patches-layer", "shade",
+    "jquery", "knockout", "color-patch", "patch-list", "shade",
     "spectrum", "byte-color", "persist", "interactive-image", "bootstrap"
     /* not captured */
-], function($, ko, ColorPatch, PatchList, ColorPatchesLayer, Shade, Spectrum,
+], function($, ko, ColorPatch, PatchList, Shade, Spectrum,
   ByteColor, persist, InteractiveImage) {
 
   function AppViewModel() {
@@ -31,8 +31,6 @@ define([
     this.counts = ko.computed(AppViewModel.prototype.counts, this);
 
     InteractiveImage.setup("img/groningen-4.jpg",this);
-    ColorPatchesLayer.setup(this.patches);
-    this.log("FIXME extract template loader", "red");
 
     function makeShade(r,g,b) {
       return new Shade({ colors: [new ByteColor(r,g,b)], maximumSize: 3});

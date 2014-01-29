@@ -3,5 +3,6 @@
 }
 
 #scratch canvas {
-  max-width: 950px;
+  width: 100%;
+  //max-width: 950px;
 }
