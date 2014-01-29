@@ -30,7 +30,7 @@ define([
     });
     this.counts = ko.computed(AppViewModel.prototype.counts, this);
 
-    InteractiveImage.setup("img/groningen-test.jpg",this);
+    InteractiveImage.setup("img/groningen-4.jpg",this);
     ColorPatchesLayer.setup(this.patches);
     this.log("FIXME extract template loader", "red");
 

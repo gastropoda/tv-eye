@@ -11,7 +11,15 @@ define([ "paper", "flood-fill" ], function(paper, FloodFill) {
       FloodFill.extend(scratch.imageData);
     };
     raster.onClick = function(event) {
-      scratch.pickPixel(event.point);
+      var relPoint = new paper.Point(
+        event.point.x / event.event.target.clientWidth,
+        event.point.y / event.event.target.clientHeight
+      );
+      var point = new paper.Point(
+        Math.round(relPoint.x * raster.width),
+        Math.round(relPoint.y * raster.height)
+      );
+      scratch.pickPixel(point);
     };
   }
 

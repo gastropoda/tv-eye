@@ -1,13 +1,7 @@
-.log .panel-body {
-  height: 220px;
-  overflow-y: scroll;
-}
-
-.patches .panel-body {
-  height: 400px;
-  overflow-y: scroll;
-}
-
 .badge.large {
   font-size: 32pt;
+}
+
+#scratch canvas {
+  max-width: 950px;
 }
