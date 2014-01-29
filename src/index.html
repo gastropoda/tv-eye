@@ -4,38 +4,22 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!--
     <link href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
-    -->
     <link href="css/scratch.css" rel="stylesheet">
-
-    <!-- templates -->
-    <script type="text/html" id="counts" data-load="template"></script>
-    <script type="text/html" id="patch-stats" data-load="template"></script>
-    <script type="text/html" id="spectrum" data-load="template"></script>
-    <script type="text/html" id="patches" data-load="template"></script>
-    <script type="text/html" id="log" data-load="template"></script>
-    <script type="text/html" id="algo-config" data-load="template"></script>
+    <script type="text/html" id="counts-panel" data-load="template"></script>
+    <script type="text/html" id="config-panel" data-load="template"></script>
   </head>
 
   <body>
     <p class="vertical-space"></p>
     <div class="container">
       <div class="row">
-        <div class="col-md-3">
-          <div data-bind="template {name: 'counts'}"></div>
-          <div data-bind="template {name: 'patch-stats'}"></div>
-          <div data-bind="template {name: 'spectrum', data: spectrum}"></div>
-          <div data-bind="template {name: 'log'}"></div>
+        <div class="col-lg-2">
+          <div data-bind="template {name: 'counts-panel'}"></div>
         </div>
-
-        <div class="col-md-6">
-          <div data-bind="template {name: 'algo-config', data: $data}"></div>
+        <div class="col-lg-10">
           <div id="scratch"></div>
-        </div>
-
-        <div class="col-md-3">
-          <div data-bind="template {name: 'patches'}"></div>
+          <div data-bind="template {name: 'config-panel', data: $data}"></div>
         </div>
       </div>
     </div>

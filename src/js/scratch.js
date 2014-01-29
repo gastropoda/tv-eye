@@ -22,6 +22,7 @@ define([
 
   loadTemplates().done(function () {
     ko.applyBindings(new AppViewModel());
+    $("[data-toggle='tooltip']").tooltip({container: "body"});
   });
 
 });

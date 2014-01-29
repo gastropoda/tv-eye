@@ -1,7 +1,7 @@
 define([
     /* captured by function args */
     "jquery", "knockout", "color-patch", "patch-list", "color-patches-layer", "shade",
-    "spectrum", "byte-color", "persist", "interactive-image"
+    "spectrum", "byte-color", "persist", "interactive-image", "bootstrap"
     /* not captured */
 ], function($, ko, ColorPatch, PatchList, ColorPatchesLayer, Shade, Spectrum,
   ByteColor, persist, InteractiveImage) {
@@ -10,7 +10,7 @@ define([
     this.NO_PATCH = 255;
     this.floodFillTolerance = 30;
     this.manualTolerance = persist("scratch.manualTolerance", ko.observable(40));
-    this.manualTolerance = persist("scratch.autoTolerance", ko.observable(30));
+    this.autoTolerance = persist("scratch.autoTolerance", ko.observable(30));
     this.gridStep = ko.observable( new paper.Size(12,20) );
     this.gridOffset = ko.computed( function() {
       return this.gridStep().divide(2);
@@ -99,9 +99,9 @@ define([
     }
   }
 
-  AppViewModel.prototype.classifyColor = function(point, color) {
+  AppViewModel.prototype.classifyColor = function(point, color, tolerance) {
     var shade;
-    if (shade = this.spectrum.classifyColor(color, this.manualTolerance())) {
+    if (shade = this.spectrum.classifyColor(color, tolerance)) {
       var patch = this.findPatch(point);
       patch.shade = shade;
       this.patchList.put(patch);
@@ -112,7 +112,7 @@ define([
     var pixel = this.imageData.color(point);
     var patchIndex = pixel.alpha;
     if (patchIndex == this.NO_PATCH) {
-      this.classifyColor(point, pixel);
+      this.classifyColor(point, pixel, this.manualTolerance());
     } else {
       this.patchList.get(patchIndex).toggleSelected();
     }
@@ -122,7 +122,7 @@ define([
     var pixel = this.imageData.color(point);
     var patchIndex = pixel.alpha;
     if (patchIndex == this.NO_PATCH) {
-      this.classifyColor(point, pixel);
+      this.classifyColor(point, pixel, this.autoTolerance());
     }
   }
 
