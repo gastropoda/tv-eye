@@ -21,6 +21,7 @@
     "bootstrap": "~3.0.3",
     "paper": "~0.9.15",
     "requirejs": "~2.1.10",
-    "knockout.js": "~3.0.0"
+    "knockout.js": "~3.0.0",
+    "lazy.js": "~0.3.2"
   }
 }
