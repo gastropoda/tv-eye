@@ -121,28 +121,38 @@ define([
   AppViewModel.prototype.autoPickPixel = function(point) {
     var pixel = this.imageData.color(point);
     var patchIndex = pixel.alpha;
-    if (patchIndex == this.NO_PATCH) {
+    if (patchIndex === this.NO_PATCH) {
       this.classifyColor(point, pixel, this.autoTolerance());
     }
+  }
+
+  function cartesianMap(xseq, yseq, project) {
+    return xseq.reduce(function(product, x){
+      return Lazy(product).concat(yseq.map(function(y) {
+        return project(x,y);
+      }));
+    }, []);
   }
 
   AppViewModel.prototype.countPatches = function() {
     var w = 1 * this.gridStepWidth();
     var h = 1 * this.gridStepHeight();
-    var x0 = w / 2;
-    var y0 = h / 2;
+    var wImg = this.imageData.width;
+    var hImg = this.imageData.height;
+    var x0 = wImg % w / 2;
+    var y0 = hImg % h / 2;
 
-    var nodes = [];
-    for(var y = y0; y < this.imageData.height; y += h) {
-      for(var x = x0; x < this.imageData.width; x += w) {
-        nodes.push(new paper.Point(x,y));
-      }
-    }
+    var xRange = Lazy.range(x0, wImg, w);
+    var yRange = Lazy.range(y0, hImg, h);
+
+    var nodes = cartesianMap(yRange, xRange, function(y,x) {
+      return new paper.Point(x,y);
+    });
 
     var self = this;
-    var totalChecks = nodes.length;
+    var totalChecks = xRange.size() * yRange.size();
     var doneChecks = 0;
-    Lazy(nodes).chunk(1000).async().each(function(ps) {
+    nodes.chunk(1000).async().each(function(ps) {
       Lazy(ps).each(function(p) {
         self.autoPickPixel(p);
         doneChecks++;

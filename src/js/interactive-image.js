@@ -44,7 +44,7 @@ define([
           point: rect.point.multiply(imageScale),
           size: rect.size.multiply(imageScale),
           radius: 3,
-          strokeColor: "rgba(255,255,255,0.9)",
+          strokeColor: "rgba(255,255,255,0.8)",
           strokeWidth: 3
         });
         uiLayer.addChild(patchViz);
