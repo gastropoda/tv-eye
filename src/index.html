@@ -8,11 +8,17 @@
     <link href="css/scratch.css" rel="stylesheet">
     <script type="text/html" id="counts-panel" data-load="template"></script>
     <script type="text/html" id="config-panel" data-load="template"></script>
+    <script type="text/html" id="progress-bar" data-load="template"></script>
   </head>
 
   <body>
     <p class="vertical-space"></p>
     <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div data-bind="template {name: 'progress-bar'}"></div>
+        </div>
+      </div>
       <div class="row">
         <div class="col-lg-2">
           <div data-bind="template {name: 'counts-panel'}"></div>

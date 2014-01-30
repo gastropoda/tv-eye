@@ -6,3 +6,9 @@
   width: 100%;
   //max-width: 950px;
 }
+
+.no-transitions .progress-bar {
+  -webkit-transition: none;
+          transition: none;
+}
+

@@ -1,20 +1,22 @@
 define([
     /* captured by function args */
     "jquery", "knockout", "color-patch", "patch-list", "shade",
-    "spectrum", "byte-color", "persist", "interactive-image", "bootstrap"
+    "spectrum", "byte-color", "persist", "interactive-image", "bootstrap",
+    "lazy"
     /* not captured */
 ], function($, ko, ColorPatch, PatchList, Shade, Spectrum,
   ByteColor, persist, InteractiveImage) {
+
+  var Lazy = require("lazy");
 
   function AppViewModel() {
     this.NO_PATCH = 255;
     this.floodFillTolerance = 30;
     this.manualTolerance = persist("scratch.manualTolerance", ko.observable(40));
     this.autoTolerance = persist("scratch.autoTolerance", ko.observable(30));
-    this.gridStep = ko.observable( new paper.Size(12,20) );
-    this.gridOffset = ko.computed( function() {
-      return this.gridStep().divide(2);
-    }, this);
+    this.gridStepWidth = persist("scratch.gridStep.width", ko.observable(50));
+    this.gridStepHeight = persist("scratch.gridStep.height", ko.observable(50));
+    this.countProgress = ko.observable(0);
     this.patchList = new PatchList();
     this.patches = this.patchList.patches;
     this.patchCount = ko.computed(function() { return this.patches().length; }, this);
@@ -125,12 +127,28 @@ define([
   }
 
   AppViewModel.prototype.countPatches = function() {
-    var p = new paper.Point;
-    for(p.y = this.gridOffset().height; p.y < this.imageData.height; p.y += this.gridStep().height) {
-      for(p.x = this.gridOffset().width; p.x < this.imageData.width; p.x += this.gridStep().width) {
-        this.autoPickPixel(p);
+    var w = 1 * this.gridStepWidth();
+    var h = 1 * this.gridStepHeight();
+    var x0 = w / 2;
+    var y0 = h / 2;
+
+    var nodes = [];
+    for(var y = y0; y < this.imageData.height; y += h) {
+      for(var x = x0; x < this.imageData.width; x += w) {
+        nodes.push(new paper.Point(x,y));
       }
     }
+
+    var self = this;
+    var totalChecks = nodes.length;
+    var doneChecks = 0;
+    Lazy(nodes).chunk(1000).async().each(function(ps) {
+      Lazy(ps).each(function(p) {
+        self.autoPickPixel(p);
+        doneChecks++;
+      });
+      self.countProgress( doneChecks / totalChecks );
+    });
   }
 
   return AppViewModel;
