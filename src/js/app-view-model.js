@@ -11,7 +11,7 @@ define([
 
   function AppViewModel() {
     this.NO_PATCH = 255;
-    this.floodFillTolerance = 30;
+    this.floodFillTolerance = persist("scratch.floodFillTolerance", ko.observable(30));
     this.manualTolerance = persist("scratch.manualTolerance", ko.observable(40));
     this.autoTolerance = persist("scratch.autoTolerance", ko.observable(30));
     this.gridStepWidth = persist("scratch.gridStep.width", ko.observable(50));
@@ -80,7 +80,7 @@ define([
   }
 
   AppViewModel.prototype.findPatch = function(point) {
-    return this.imageData.floodFill(point, this.floodFillTolerance, this.patchList.nextIndex());
+    return this.imageData.floodFill(point, this.floodFillTolerance(), this.patchList.nextIndex());
   };
 
   AppViewModel.prototype.removePatch = function(patch) {
