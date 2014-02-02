@@ -23,6 +23,8 @@ define([
     this.patchCount = ko.computed(function() { return this.patches().length; }, this);
     this.minPatchSize = ko.computed(function() { return this.patches().minSize(); }, this);
     this.maxPatchSize = ko.computed(function() { return this.patches().maxSize(); }, this);
+    this.minPatchArea = ko.computed(function() { return this.patches().minArea(); }, this);
+    this.maxPatchArea = ko.computed(function() { return this.patches().maxArea(); }, this);
     this.maxLogMessages = 10;
     this.messages = ko.observableArray();
     this.load( function () {

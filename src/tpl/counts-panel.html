@@ -8,6 +8,16 @@
       <td data-bind="text: patchCount" />
       <td/>
     </tr>
+
+    <tr>
+      <th>min area:</th>
+      <td data-bind="text: minPatchArea()" />
+    </tr>
+    <tr>
+      <th>max area:</th>
+      <td data-bind="text: maxPatchArea()" />
+    </tr>
+
     <tr>
       <th>min size:</th>
       <td data-bind="text: minPatchSize().width" />

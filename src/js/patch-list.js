@@ -17,6 +17,18 @@ define(["knockout","paper"], function(ko,paper) {
           return patch.bounds().size;
         }).reduce(paper.Size.max);
       },
+      minArea: function() {
+        return this.length &&
+          Math.min.apply( null, this.map(function(patch) {
+          return patch.area();
+        }));
+      },
+      maxArea: function() {
+        return this.length &&
+          Math.max.apply( null, this.map(function(patch) {
+          return patch.area();
+        }));
+      }
     };
 
     self.patches = ko.computed(function() {
