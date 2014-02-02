@@ -112,7 +112,7 @@ define([
         if (neighbour.shade == shade) {
           this.imageData.replaceIndex(neighbourIndex, newIndex, neighbour.bounds());
           this.patchList.remove(neighbour);
-          patch.bounds( patch.bound().unite( neighbour.bounds() );
+          patch.bounds( patch.bound().unite( neighbour.bounds()));
         }
       });
       this.patchList.put(patch);
