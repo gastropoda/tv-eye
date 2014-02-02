@@ -17,9 +17,11 @@ define([
     },
 
     calibrate: function(color) {
-      this.colors.push(color);
-      while (this.maximumSize && this.colors().length > this.maximumSize)
-        this.colors.remove( this.leastDistinctColor() );
+      if (this.colors.indexOf(color) < 0) {
+        this.colors.push(color);
+        while (this.maximumSize && this.colors().length > this.maximumSize)
+          this.colors.remove( this.leastDistinctColor() );
+      }
     },
 
     distinctness: function(color) {

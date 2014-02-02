@@ -57,6 +57,15 @@ define([
         expect(shade.colors()).to.include(colors[0]);
         expect(shade.colors()).to.include(colors[1]);
       });
+
+      it("doesn't add the same color twice", function() {
+        var shade = new Shade();
+        expect(shade.colors()).to.be.empty;
+        shade.calibrate(colors[0]);
+        expect(shade.colors().length).to.eq(1);
+        shade.calibrate(colors[0]);
+        expect(shade.colors().length).to.eq(1);
+      });
     });
 
     describe("handling max size", function() {
