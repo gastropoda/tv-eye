@@ -75,12 +75,27 @@ define([
     }
   }
 
-  AppViewModel.prototype.adjustSpectrum = function(_, event) {
+  AppViewModel.prototype.adjustSpectrum = function() {
     this.patches().forEach(function(patch){
       patch.shade.calibrate(patch.color());
     });
     this.save();
   }
+
+  AppViewModel.prototype.calibrateGrid = function() {
+    this.gridStepWidth( Math.floor( this.minPatchSize().width * 0.8 ));
+    this.gridStepHeight( Math.floor( this.minPatchSize().height * 0.8 ));
+  }
+
+  AppViewModel.prototype.calibrateAreaFilter = function() {
+    this.minCountedPatchArea( Math.floor( this.minPatchArea() * 0.8 ));
+  }
+
+  AppViewModel.prototype.calibrate = function() {
+    this.adjustSpectrum();
+    this.calibrateGrid();
+    this.calibrateAreaFilter();
+  };
 
   AppViewModel.prototype.findPatch = function(point, newIndex, neighbours) {
     return this.imageData.floodFill(point, this.floodFillTolerance(), newIndex);
