@@ -80,8 +80,8 @@ define([
     this.save();
   }
 
-  AppViewModel.prototype.findPatch = function(point) {
-    return this.imageData.floodFill(point, this.floodFillTolerance(), this.patchList.nextIndex());
+  AppViewModel.prototype.findPatch = function(point, newIndex, neighbours) {
+    return this.imageData.floodFill(point, this.floodFillTolerance(), newIndex);
   };
 
   AppViewModel.prototype.removePatch = function(patch) {
@@ -103,8 +103,18 @@ define([
   AppViewModel.prototype.classifyColor = function(point, color, tolerance) {
     var shade;
     if (shade = this.spectrum.classifyColor(color, tolerance)) {
-      var patch = this.findPatch(point);
+      var neighbours = [];
+      var newIndex = this.patchList.nextIndex();
+      var patch = this.findPatch(point, newIndex, neighbours);
       patch.shade = shade;
+      $.each(neighbours, function(_,neighbourIndex) {
+        var neighbour = this.patchList()[neighbourIndex];
+        if (neighbour.shade == shade) {
+          this.imageData.replaceIndex(neighbourIndex, newIndex, neighbour.bounds());
+          this.patchList.remove(neighbour);
+          patch.bounds( patch.bound().unite( neighbour.bounds() );
+        }
+      });
       this.patchList.put(patch);
       return patch;
     }
