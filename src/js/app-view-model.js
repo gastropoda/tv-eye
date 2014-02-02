@@ -16,6 +16,7 @@ define([
     this.autoTolerance = persist("scratch.autoTolerance", ko.observable(30));
     this.gridStepWidth = persist("scratch.gridStep.width", ko.observable(50));
     this.gridStepHeight = persist("scratch.gridStep.height", ko.observable(50));
+    this.minCountedPatchArea = persist("scratch.minCountedPatchArea", ko.observable(1000));
     this.countProgress = ko.observable(0);
     this.patchList = new PatchList();
     this.patches = this.patchList.patches;
@@ -105,6 +106,7 @@ define([
       var patch = this.findPatch(point);
       patch.shade = shade;
       this.patchList.put(patch);
+      return patch;
     }
   }
 
@@ -122,9 +124,16 @@ define([
     var pixel = this.imageData.color(point);
     var patchIndex = pixel.alpha;
     if (patchIndex === this.NO_PATCH) {
-      this.classifyColor(point, pixel, this.autoTolerance());
+      var patch = this.classifyColor(point, pixel, this.autoTolerance());
+      if (patch && !this.autoAcceptable(patch)) {
+        patch.selected(false);
+      }
     }
   }
+
+  AppViewModel.prototype.autoAcceptable = function(patch) {
+    return patch.area() > this.minCountedPatchArea();
+  };
 
   function cartesianMap(xseq, yseq, project) {
     return xseq.reduce(function(product, x){
