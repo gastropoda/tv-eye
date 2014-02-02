@@ -37,19 +37,17 @@ function(paper, FloodFill, ko) {
 
     canvas.on('mousewheel', function(event) {
       event.preventDefault();
-      if (event.deltaY > 0) {
-        var zoom = 3;
-        paper.view.zoom = zoom;
-        function center(size, zoom, c) {
-          return 0.5 * size / zoom + c * (1 - 1/zoom);
-        }
-        var cx = center( paper.view.viewSize.width, zoom, event.offsetX);
-        var cy = center( paper.view.viewSize.height, zoom, event.offsetY);
-        paper.view.center = new paper.Point( cx, cy );
-      } else if (event.deltaY < 0) {
-        paper.view.zoom = 1;
-        paper.view.center = paper.view.viewSize.divide(2);
+
+      var zoom = paper.view.zoom;
+      zoom += event.deltaY * 0.3;
+      zoom = Math.max(1, Math.min( 3, zoom));
+      paper.view.zoom = zoom;
+      function center(size, zoom, c) {
+        return 0.5 * size / zoom + c * (1 - 1/zoom);
       }
+      var cx = center( paper.view.viewSize.width, zoom, event.offsetX);
+      var cy = center( paper.view.viewSize.height, zoom, event.offsetY);
+      paper.view.center = new paper.Point( cx, cy );
     });
 
   }
