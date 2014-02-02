@@ -4,7 +4,8 @@ require.config({
     paper: "../../bower_components/paper/dist/paper",
     knockout: "../../bower_components/knockout.js/knockout.debug",
     bootstrap: "../../bower_components/bootstrap/dist/js/bootstrap.min",
-    lazy: "../../bower_components/lazy.js/lazy"
+    lazy: "../../bower_components/lazy.js/lazy",
+    mousewheel: "../../bower_components/jquery-mousewheel/jquery.mousewheel"
   },
 
   map: {
@@ -22,6 +23,9 @@ require.config({
     },
     lazy: {
       exports: "Lazy"
+    },
+    mousewheel: {
+      deps: ["jquery"]
     }
   }
 });
