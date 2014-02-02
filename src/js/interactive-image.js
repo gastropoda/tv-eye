@@ -1,11 +1,12 @@
 define([
-  "paper", "flood-fill", "knockout"
+  "paper", "flood-fill", "knockout", "mousewheel"
 ],
 function(paper, FloodFill, ko) {
   return { setup: setup };
 
   function setup(url, scratch) {
-    paper.setup($("<canvas/>").appendTo("#scratch").get(0));
+    var canvas = $("<canvas/>").appendTo("#scratch");
+    paper.setup(canvas.get(0));
     var raster = new paper.Raster(url);
     raster.onLoad = function() {
       var imageRatio = this.size.width / this.size.height;
@@ -33,6 +34,20 @@ function(paper, FloodFill, ko) {
       );
       scratch.pickPixel(point);
     };
+
+    canvas.on('mousewheel', function(event) {
+      event.preventDefault();
+      if (event.deltaY > 0) {
+        paper.view.zoom = 2;
+        var cx = 0.25 * paper.view.viewSize.width + 0.5 * event.offsetX;
+        var cy = 0.25 * paper.view.viewSize.height + 0.5 * event.offsetY;
+        paper.view.center = new paper.Point( cx, cy );
+      } else if (event.deltaY < 0) {
+        paper.view.zoom = 1;
+        paper.view.center = paper.view.viewSize.divide(2);
+      }
+    });
+
   }
 
   function setupPatchesLayer(observablePatches, imageScale) {
