@@ -18,13 +18,13 @@ define([
     this.gridStepHeight = persist("scratch.gridStep.height", ko.observable(50));
     this.imageData = ko.observable({width:0, height:0});
     this.gridRangeX = ko.computed( function() {
-      var w = 1 * this.gridStepWidth();
+      var w = Math.max(1, 1 * this.gridStepWidth());
       var wImg = this.imageData().width;
       var x0 = wImg % w / 2;
       return Lazy.range(x0, wImg, w);
     }, this);
     this.gridRangeY = ko.computed( function() {
-      var h = 1 * this.gridStepHeight();
+      var h = Math.max(1, 1 * this.gridStepHeight());
       var hImg = this.imageData().height;
       var y0 = hImg % h / 2;
       return Lazy.range(y0, hImg, h);

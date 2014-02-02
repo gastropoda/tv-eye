@@ -1,13 +1,26 @@
 <div class="algo-config panel panel-default small">
   <div class="panel-body">
     <form class="form-horizontal" role="form">
-      <div class="btn-group">
-        <a href="#"
-           class="btn btn-danger"
-           data-toggle="tooltip"
-           title="Use current selection to adjust settings"
-           data-bind="click: calibrate">Calibrate</a>
-        <a href="#" class="btn btn-success" data-bind="click: countPatches">Count</a>
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="btn-group">
+            <a href="#"
+              class="btn btn-success"
+              data-toggle="tooltip"
+              title="Count colored patches"
+              data-bind="click: countPatches">Count</a>
+            <a href="#"
+              class="btn btn-danger"
+              data-toggle="tooltip"
+              title="Use current selection to adjust settings"
+              data-bind="click: calibrate">Calibrate</a>
+          </div>
+        </div>
+        <div class="col-lg-9" data-bind="foreach: spectrum.shades">
+          <span data-bind="foreach: colors">
+            <span data-bind="style { background: $data }" class="badge" >O</span>
+          </span>
+        </div>
       </div>
 
       <div class="form-group"
