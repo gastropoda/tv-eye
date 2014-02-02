@@ -16,6 +16,19 @@ define([
     this.autoTolerance = persist("scratch.autoTolerance", ko.observable(30));
     this.gridStepWidth = persist("scratch.gridStep.width", ko.observable(50));
     this.gridStepHeight = persist("scratch.gridStep.height", ko.observable(50));
+    this.imageData = ko.observable({width:0, height:0});
+    this.gridRangeX = ko.computed( function() {
+      var w = 1 * this.gridStepWidth();
+      var wImg = this.imageData().width;
+      var x0 = wImg % w / 2;
+      return Lazy.range(x0, wImg, w);
+    }, this);
+    this.gridRangeY = ko.computed( function() {
+      var h = 1 * this.gridStepHeight();
+      var hImg = this.imageData().height;
+      var y0 = hImg % h / 2;
+      return Lazy.range(y0, hImg, h);
+    }, this);
     this.minCountedPatchArea = persist("scratch.minCountedPatchArea", ko.observable(1000));
     this.countProgress = ko.observable(0);
     this.patchList = new PatchList();
@@ -98,12 +111,12 @@ define([
   };
 
   AppViewModel.prototype.findPatch = function(point, newIndex, neighbours) {
-    return this.imageData.floodFill(point, this.floodFillTolerance(), newIndex);
+    return this.imageData().floodFill(point, this.floodFillTolerance(), newIndex);
   };
 
   AppViewModel.prototype.removePatch = function(patch) {
     var index = this.patchList.remove(patch);
-    this.imageData.replaceIndex(index, this.NO_PATCH, patch.bounds());
+    this.imageData().replaceIndex(index, this.NO_PATCH, patch.bounds());
   };
 
   AppViewModel.prototype.log = function(message, color) {
@@ -127,7 +140,7 @@ define([
       $.each(neighbours, function(_,neighbourIndex) {
         var neighbour = this.patchList()[neighbourIndex];
         if (neighbour.shade == shade) {
-          this.imageData.replaceIndex(neighbourIndex, newIndex, neighbour.bounds());
+          this.imageData().replaceIndex(neighbourIndex, newIndex, neighbour.bounds());
           this.patchList.remove(neighbour);
           patch.area( patch.area() + neighbour.area() );
           patch.bounds( patch.bound().unite( neighbour.bounds()));
@@ -140,7 +153,7 @@ define([
   }
 
   AppViewModel.prototype.pickPixel = function(point) {
-    var pixel = this.imageData.color(point);
+    var pixel = this.imageData().color(point);
     var patchIndex = pixel.alpha;
     if (patchIndex == this.NO_PATCH) {
       this.classifyColor(point, pixel, this.manualTolerance());
@@ -150,7 +163,7 @@ define([
   }
 
   AppViewModel.prototype.autoPickPixel = function(point) {
-    var pixel = this.imageData.color(point);
+    var pixel = this.imageData().color(point);
     var patchIndex = pixel.alpha;
     if (patchIndex === this.NO_PATCH) {
       var patch = this.classifyColor(point, pixel, this.autoTolerance());
@@ -173,22 +186,14 @@ define([
   }
 
   AppViewModel.prototype.countPatches = function() {
-    var w = 1 * this.gridStepWidth();
-    var h = 1 * this.gridStepHeight();
-    var wImg = this.imageData.width;
-    var hImg = this.imageData.height;
-    var x0 = wImg % w / 2;
-    var y0 = hImg % h / 2;
-
-    var xRange = Lazy.range(x0, wImg, w);
-    var yRange = Lazy.range(y0, hImg, h);
-
-    var nodes = cartesianMap(yRange, xRange, function(y,x) {
+    var nodes = cartesianMap(this.gridRangeY(), this.gridRangeX(), function(y,x) {
       return new paper.Point(x,y);
     });
 
     var self = this;
-    var totalChecks = xRange.size() * yRange.size();
+    var totalChecks = this.gridRangeX().size() * this.gridRangeY().size();
+    if (!totalChecks)
+      return;
     var doneChecks = 0;
     nodes.chunk(1000).async().each(function(ps) {
       Lazy(ps).each(function(p) {

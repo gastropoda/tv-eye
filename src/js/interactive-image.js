@@ -1,6 +1,7 @@
 define([
   "paper", "flood-fill", "knockout"
-], function(paper, FloodFill, ko) {
+],
+function(paper, FloodFill, ko) {
   return { setup: setup };
 
   function setup(url, scratch) {
@@ -16,9 +17,10 @@ define([
       this.scale(imageScale);
       this.setPosition(viewSize.divide(2));
 
-      scratch.imageData = this.getImageData();
-      FloodFill.extend(scratch.imageData);
+      scratch.imageData(this.getImageData());
+      FloodFill.extend(scratch.imageData());
       setupPatchesLayer(scratch.patches, imageScale);
+      setupGridLayer(scratch, imageScale);
     };
     raster.onClick = function(event) {
       var relPoint = new paper.Point(
@@ -53,4 +55,38 @@ define([
     });
   }
 
+  function setupGridLayer(scratch, scale) {
+    var gridLayer = new paper.Layer();
+
+    setupGridRefresfer( scratch.gridRangeX, function( path, x ) {
+      path.moveTo( x, 0 );
+      path.lineTo( x, scratch.imageData().height );
+    });
+
+    setupGridRefresfer( scratch.gridRangeY, function( path, y ) {
+      path.moveTo( 0, y );
+      path.lineTo( scratch.imageData().width, y );
+    });
+
+    function setupGridRefresfer(rangeObservable, lineFn) {
+      var group = new paper.Group();
+      gridLayer.addChild(group);
+      rangeObservable.subscribe(refresher);
+      refresher( rangeObservable() );
+
+      function refresher( range ) {
+        group.removeChildren();
+        var path = new paper.CompoundPath({
+          strokeColor: "rgba(100,255,100,0.9)",
+          strokeWidth: 1
+        });
+        path.scale(scale);
+        range.each( function(x) {
+          lineFn( path, x );
+        });
+        group.addChild(path);
+        paper.view.draw();
+      }
+    }
+  }
 });
