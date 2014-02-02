@@ -51,26 +51,49 @@ define(["flood-fill", "jquery", "paper", "byte-color"
       beforeEach(function() {
         image = context.getImageData(0, 0, resolution.width, resolution.height);
         FloodFill.extend(image);
-        floodFillResult = image.floodFill(startPoint, tolerance, paintIndex);
       });
 
-      it("fills the color", function() {
-        expect(image).to.contain.pixels(function(x, y) {
-          return new ByteColor( 0, rect.contains(x, y) ? 200 : 0, 0, rect.contains(x, y) ? 1 : 255);
+      describe("paint on black", function() {
+        beforeEach(function() {
+          floodFillResult = image.floodFill(startPoint, tolerance, paintIndex);
+        });
+        it("fills the color", function() {
+          expect(image).to.contain.pixels(function(x, y) {
+            return new ByteColor( 0, rect.contains(x, y) ? 200 : 0, 0, rect.contains(x, y) ? 1 : 255);
+          });
+        });
+
+        it("returns patch area", function() {
+          expect(floodFillResult.area()).to.eq(rect.width * rect.height);
+        });
+
+        it("returns patch color", function() {
+          expect(floodFillResult.color()).to.equal(new ByteColor(0,200,0));
+        });
+
+        it("returns patch bounds", function() {
+          expect(floodFillResult.bounds()).to.equal(rect);
         });
       });
 
-      it("returns patch area", function() {
-        expect(floodFillResult.area()).to.eq(rect.width * rect.height);
+      describe("paint with touching indices", function() {
+        var touchIndices = [];
+        beforeEach(function() {
+          image.setColor(rect.left - 1, rect.top, { alpha: 10 });
+          image.setColor(rect.right, rect.top, { alpha: 11 });
+          image.setColor(rect.left, rect.bottom - 1, { alpha: 12 });
+          image.setColor(rect.right, rect.bottom - 1, { alpha: 13 });
+          image.floodFill(startPoint, tolerance, paintIndex, touchIndices);
+        });
+
+        it( "returns touching indices" , function() {
+          expect(touchIndices).to.contain(10);
+          expect(touchIndices).to.contain(11);
+          expect(touchIndices).to.contain(12);
+          expect(touchIndices).to.contain(13);
+        });
       });
 
-      it("returns patch color", function() {
-        expect(floodFillResult.color()).to.equal(new ByteColor(0,200,0));
-      });
-
-      it("returns patch bounds", function() {
-        expect(floodFillResult.bounds()).to.equal(rect);
-      });
     });
 
     describe(".replaceIndex()", function() {
@@ -78,7 +101,7 @@ define(["flood-fill", "jquery", "paper", "byte-color"
       var changedRect = rect.intersect(replaceRect);
 
       beforeEach(function() {
-        // alpha lame ass way to fill it with particular value of alpha channel
+        // lame ass way to fill it with particular value of alpha channel
         context.beginPath();
         context.rect(rect.x, rect.y, rect.width, rect.height);
         context.clip();

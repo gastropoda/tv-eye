@@ -33,7 +33,9 @@ define([
       });
     },
 
-    floodFill: function(point, tolerance, markValue) {
+    floodFill: function(point, tolerance, markValue, touchIndices) {
+      if (typeof(touchIndices) === "undefined")
+        touchIndices = [];
       var x = Math.round(point.x);
       var y = Math.round(point.y);
       var width = this.width;
@@ -57,7 +59,11 @@ define([
 
       function floodFillTest(x, y) {
         var pixelColor = self.color(x, y);
-        return pixelColor.alpha == 255 && pixelColor.within(tolerance, targetColor);
+        var index = pixelColor.alpha;
+        if (index !== 255 && index !== markValue && touchIndices.indexOf(index) < 0) {
+          touchIndices.push(index)
+        }
+        return index === 255 && pixelColor.within(tolerance, targetColor);
       };
 
       var queue = [[x, y]];
