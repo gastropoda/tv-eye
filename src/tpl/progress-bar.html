@@ -1,9 +1,31 @@
-<div class="progress progress-striped no-transitions"
-     data-bind="foreach: counts">
-  <div class="progress-bar"
-    data-bind="text: count || '',
-               style: {
-                  background: shade.color(),
-                  width: (count / $parent.patches().length * $parent.countProgress() * 100) + '%'
-    }"></div>
+<div class="row">
+  <div class="col-lg-1">
+    <a href="#"
+      class="btn btn-success btn-xs pull-right"
+      data-toggle="tooltip"
+      data-placement="auto"
+      title="Count colored patches"
+      data-bind="click: countPatches">Count</a>
+  </div>
+  <div class="col-lg-10">
+
+    <div class="progress progress-striped no-transitions"
+      data-bind="foreach: counts">
+      <div class="progress-bar"
+        data-bind="text: count || '',
+        style: {
+        background: shade.color(),
+        width: (count / $parent.patches().length * $parent.countProgress() * 100) + '%'
+        }"></div>
+    </div>
+  </div>
+
+  <div class="col-lg-1">
+    <a href="#"
+      class="btn btn-danger btn-xs"
+      data-toggle="tooltip"
+      data-placement="auto"
+      title="Use current selection to adjust settings"
+      data-bind="click: calibrate">Calibrate</a>
+  </div>
 </div>

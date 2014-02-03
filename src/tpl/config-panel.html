@@ -1,127 +1,117 @@
-<div class="algo-config panel panel-default small">
+<div class="algo-config panel panel-default lgall">
+<small>
   <div class="panel-body">
     <form class="form-horizontal" role="form">
       <div class="row">
-        <div class="col-lg-3">
-          <div class="btn-group">
-            <a href="#"
-              class="btn btn-success"
-              data-toggle="tooltip"
-              title="Count colored patches"
-              data-bind="click: countPatches">Count</a>
-            <a href="#"
-              class="btn btn-danger"
-              data-toggle="tooltip"
-              title="Use current selection to adjust settings"
-              data-bind="click: calibrate">Calibrate</a>
-          </div>
-        </div>
-        <div class="col-lg-9" data-bind="foreach: spectrum.shades">
-          <span data-bind="foreach: colors">
-            <span data-bind="style { background: $data }" class="badge" >O</span>
-          </span>
+        <div class="col-lg-12">
+          <p class="text-center" data-bind="foreach: spectrum.shades">
+            <span data-bind="foreach: colors">
+              <span data-bind="style { background: $data }" class="badge" >O</span>
+            </span>
+          </p>
         </div>
       </div>
 
-      <div class="form-group"
-           title="When to reject pixels against human command.
-                  You probably want it higher than autoTolerance."
-           data-toggle="tooltip">
+      <div class="row form-group"
+        title="When to reject pixels against human command.
+        You probably want it higher than autoTolerance."
+        data-toggle="tooltip">
         <label for="manualTolerance"
-               class="control-label col-sm-3">
-               Manual tolerance [<span data-bind="text: manualTolerance"></span>]:
+          class="control-label col-lg-3">
+          Manual tolerance [<span data-bind="text: manualTolerance"></span>]:
         </label>
-        <div class="col-sm-9">
+        <div class="col-lg-9">
           <input name="manualTolerance"
-                 type="range"
-                 min="0"
-                 max="255"
-                 class="form-control"
-                 data-bind="value: manualTolerance"></input>
+          type="range"
+          min="0"
+          max="255"
+          class="form-control"
+          data-bind="value: manualTolerance"></input>
         </div>
       </div>
 
       <div class="form-group"
-           title="When to reject pixels during automatic counting"
-           data-toggle="tooltip">
+        title="When to reject pixels during automatic counting"
+        data-toggle="tooltip">
         <label for="autoTolerance"
-               class="control-label col-sm-3">
-               Automatic tolerance [<span data-bind="text: autoTolerance"></span>]:
+          class="control-label col-lg-3">
+          Automatic tolerance [<span data-bind="text: autoTolerance"></span>]:
         </label>
-        <div class="col-sm-9">
+        <div class="col-lg-9">
           <input name="autoTolerance"
-                 type="range"
-                 min="0"
-                 max="255"
-                 class="form-control"
-                 data-bind="value: autoTolerance"></input>
+          type="range"
+          min="0"
+          max="255"
+          class="form-control"
+          data-bind="value: autoTolerance"></input>
         </div>
       </div>
 
       <div class="form-group"
-           title="How long to keep flooding"
-           data-toggle="tooltip">
+        title="How long to keep flooding"
+        data-toggle="tooltip">
         <label for="floodFillTolerance"
-               class="control-label col-sm-3">
-               Flood fill tolerance [<span data-bind="text: floodFillTolerance"></span>]:
+          class="control-label col-lg-3">
+          Flood fill tolerance [<span data-bind="text: floodFillTolerance"></span>]:
         </label>
-        <div class="col-sm-9">
+        <div class="col-lg-9">
           <input name="floodFillTolerance"
-                 type="range"
-                 min="0"
-                 max="255"
-                 class="form-control"
-                 data-bind="value: floodFillTolerance"></input>
+          type="range"
+          min="0"
+          max="255"
+          class="form-control"
+          data-bind="value: floodFillTolerance"></input>
         </div>
       </div>
 
       <div class="form-group"
-           title="Reject patches smaller than this"
-           data-toggle="tooltip">
+        title="Reject patches lgaller than this"
+        data-toggle="tooltip">
         <label for="minCountedPatchArea"
-               class="control-label col-sm-3">
-               Minimal area [<span data-bind="text: minCountedPatchArea"></span>]:
+          class="control-label col-lg-3">
+          Minimal area [<span data-bind="text: minCountedPatchArea"></span>]:
         </label>
-        <div class="col-sm-9">
+        <div class="col-lg-9">
           <input name="minCountedPatchArea"
-                 type="range"
-                 min="0"
-                 max="10000"
-                 class="form-control"
-                 data-bind="value: minCountedPatchArea"></input>
+          type="range"
+          min="0"
+          max="10000"
+          class="form-control"
+          data-bind="value: minCountedPatchArea"></input>
         </div>
       </div>
 
       <div class="form-group">
         <label for="gridStepWidth"
-               class="control-label col-sm-3">
-               Grid step width [<span data-bind="text: gridStepWidth"></span>]:
+          class="control-label col-lg-3">
+          Grid step width [<span data-bind="text: gridStepWidth"></span>]:
         </label>
-        <div class="col-sm-9">
+        <div class="col-lg-9">
           <input name="gridStepWidth"
-                 type="range"
-                 min="1"
-                 max="255"
-                 class="form-control"
-                 data-bind="value: gridStepWidth"></input>
+          type="range"
+          min="1"
+          max="255"
+          class="form-control"
+          data-bind="value: gridStepWidth"></input>
         </div>
       </div>
 
       <div class="form-group">
         <label for="gridStepHeight"
-               class="control-label col-sm-3">
-               Grid step height [<span data-bind="text: gridStepHeight"></span>]:
+          class="control-label col-lg-3">
+          Grid step height [<span data-bind="text: gridStepHeight"></span>]:
         </label>
-        <div class="col-sm-9">
+        <div class="col-lg-9">
           <input name="gridStepHeight"
-                 type="range"
-                 min="1"
-                 max="255"
-                 class="form-control"
-                 data-bind="value: gridStepHeight"></input>
+          type="range"
+          min="1"
+          max="255"
+          class="form-control"
+          data-bind="value: gridStepHeight"></input>
         </div>
       </div>
 
     </form>
   </div>
+</small>
 </div>
