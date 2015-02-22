@@ -1,6 +1,7 @@
 var http = require('http');
 var express = require("express");
 var RED = require("node-red");
+var path = require("path");
 
 // Create an Express app
 var app = express();
@@ -17,7 +18,9 @@ var settings = {
     httpAdminRoot:"/red",
     httpNodeRoot: "/api",
     userDir:"./nodered/",
-    functionGlobalContext: { }    // enables global context
+    functionGlobalContext: {
+      path: path
+    }    // enables global context
 };
 
 // Initialise the runtime with a server and settings
