@@ -1,0 +1,7 @@
+{
+  "name": "tv-eye",
+  "version": "0.2.0",
+  "devDependencies": {
+    "node-red": "^ 0.10.2"
+  }
+}
