@@ -7,6 +7,7 @@ var app = express();
 
 // Add a simple route for static content served from 'public'
 app.use("/",express.static("public"));
+app.use("/snapshots",express.static("snapshots"));
 
 // Create a server
 var server = http.createServer(app);
